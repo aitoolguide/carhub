@@ -32,39 +32,37 @@
 // };
 
 // export { WhatsAppButton };
+"use client";
 
-
-import Link from 'next/link';
+import { useOrigin } from '@app/hooks/useOrigin';
+import React from 'react';
 
 interface WhatsAppLinkProps {
   car: {
-    whatsappNumber?: string;
-    title?: string;
-    id?: string;
+    whatsappNumber: string;
+    title: string;
+    id: string;
   };
 }
 
-const WhatsAppLink: React.FC<WhatsAppLinkProps> = ({ car }) => {
-  // Build the URL safely, checking for window
-  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+export function WhatsAppLink({ car }: WhatsAppLinkProps) {
+  const origin = useOrigin();
 
-  const whatsappUrl = car.whatsappNumber
-    ? `https://wa.me/${car.whatsappNumber}?text=${encodeURIComponent(
-        `Hi, I'm interested in ${car.title ?? ''} - ${origin}/cars/${car.id ?? ''}`
-      )}`
-    : '#';
+  if (!origin) return null; // or loading placeholder
+
+  const url = `https://wa.me/${car.whatsappNumber}?text=${encodeURIComponent(
+    `Hi, I'm interested in ${car.title} - ${origin}/cars/${car.id}`
+  )}`;
 
   return (
-    <Link
-      href={whatsappUrl}
+    <a
+      href={url}
       target="_blank"
       rel="noopener noreferrer"
       className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-xl transition-colors duration-300"
       title="Contact on WhatsApp"
     >
       Contact on WhatsApp
-    </Link>
+    </a>
   );
-};
-
-export default WhatsAppLink;
+}

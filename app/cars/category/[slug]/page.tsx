@@ -8,7 +8,8 @@ export default async function CarsByCategoryPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug: category } = await params;
-  const filteredCars = mockCars.filter(car => car.category === category);
+  console.log('Category:', category);
+  const filteredCars = mockCars.filter(car => car.bodyType?.toLowerCase() === category.toLowerCase());
 
   return (
     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">

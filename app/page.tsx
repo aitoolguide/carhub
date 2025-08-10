@@ -27,7 +27,8 @@ import {
 } from 'lucide-react';
 
 import { randomFillSync } from "crypto";
-import WhatsAppLink from './components/shared/WhatsAppButton';
+import { WhatsAppLink } from './components/shared/WhatsAppButton';
+
 
 // Mock data - In real app, this would come from your API
 const featuredCars = [
@@ -116,11 +117,11 @@ const featuredCars = [
 ];
 
 const carCategories = [
-  { name: "Sedans", count: 1250, icon: Car, image: "/images/categories/sedan.jpg" },
-  { name: "SUVs", count: 980, icon: Car, image: "/images/categories/suv.jpg" },
-  { name: "Hatchbacks", count: 756, icon: Car, image: "/images/categories/hatchback.jpg" },
-  { name: "Convertibles", count: 234, icon: Car, image: "/images/categories/convertible.jpg" },
-  { name: "Trucks", count: 445, icon: Car, image: "/images/categories/truck.jpg" },
+  { name: "Sedan", count: 1250, icon: Car, image: "/images/categories/sedan.jpg" },
+  { name: "SUV", count: 980, icon: Car, image: "/images/categories/suv.jpg" },
+  { name: "Hatchback", count: 756, icon: Car, image: "/images/categories/hatchback.jpg" },
+  { name: "Convertible", count: 234, icon: Car, image: "/images/categories/convertible.jpg" },
+  { name: "Truck", count: 445, icon: Car, image: "/images/categories/truck.jpg" },
   { name: "Electric", count: 189, icon: Car, image: "/images/categories/electric.jpg" }
 ];
 
@@ -914,9 +915,9 @@ export default function HomePage() {
           window.addEventListener('scroll', function() {
             const backToTopButton = document.querySelector('.scroll-to-top');
             if (window.pageYOffset > 300) {
-              backToTopButton.classList.add('show');
+              backToTopButton?.classList?.add('show');
             } else {
-              backToTopButton.classList.remove('show');
+              backToTopButton?.classList?.remove('show');
             }
           });
           
@@ -929,7 +930,7 @@ export default function HomePage() {
           const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
               if (entry.isIntersecting) {
-                entry.target.classList.add('animate-fadeInUp');
+                entry?.target?.classList?.add('animate-fadeInUp');
               }
             });
           }, observerOptions);
