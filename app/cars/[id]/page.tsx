@@ -90,129 +90,141 @@ import { cn } from '@app/lib/utils';
 import { mockCars } from '@app/data/cars';
 import Link from '@node_modules/next/link';
 
-// Mock data based on the provided reference website image
-// const mockCar = {
-//     id: '130520',
-//     title: '2018 Mercedes-Benz C-Class',
-//     price: '30,888',
-//     goodDeal: true,
-//     mileage: '96,878',
-//     year: '2018',
-//     bodyType: 'Convertible',
-//     transmission: 'Automatic',
-//     drivetrain: 'All-Wheel Drive',
-//     interiorColor: 'Black',
-//     exteriorColor: 'Black',
-//     cylinders: '4',
-//     fuelType: 'Gasoline',
-//     condition: 'Used',
-//     engine: '2.0L Turbo I4',
-//     imageUrl: 'https://placehold.co/800x600/22d3ee/ffffff?text=Mercedes+C-Class',
-//     thumbnailUrls: [
-//         'https://placehold.co/120x80/60a5fa/ffffff?text=Thumbnail+1',
-//         'https://placehold.co/120x80/a3e635/ffffff?text=Thumbnail+2',
-//         'https://placehold.co/120x80/fde047/ffffff?text=Thumbnail+3',
-//     ],
-//     description: `Buy With Confidence - Clean CarFax,Special Financing Price / Cash Price: $32,888|2018 Mercedes-Benz C-Class 300 4Matic Convertible / Premium Package / Sport Package / Premium Plus Package / Sport Package / Intelligent Drive Package (Distronic Plus) / Exterior: Obsidian Black Metallic. Interior: Premium Black Leather. This 2018 Mercedes-Benz C300 Cabriolet 4Matic offers open-top luxury with the confidence of all-wheel drive. Enhanced by a Sport Package, it provides an exhilarating drive. Finished in a timeless Obsidian Black Metallic, its sleek design is elevated by the Sport Package for...`,
-//     fuelEconomyCity: '10.7',
-//     fuelEconomyHighway: '7.6',
-//     features: ['N/A'], // Based on the image showing "N/A"
-//     dealerName: 'Yorkdale Fine Cars',
-//     dealerPhone: '(416) 792-4447',
-//     dealerAddress: '8132 Keele St, Concord Ontario L4K 172, CA',
-// };
+import { ReactNode, MouseEventHandler } from 'react';
 
-// Custom component to simulate the Button component
-const Button = ({ children, className, onClick, disabled = false, variant = 'primary' }) => {
-    const baseStyles = 'px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md flex items-center justify-center';
-    const variants = {
-        primary: 'bg-teal-600 text-white hover:bg-teal-700',
-        secondary: 'bg-slate-100 text-slate-700 hover:bg-slate-200',
-        outline: 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50',
-    };
-    return (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            className={cn(baseStyles, variants[variant], disabled && 'opacity-50 cursor-not-allowed', className)}
-        >
-            {children}
-        </button>
-    );
+interface ButtonProps {
+  children: ReactNode;
+  className?: string;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
+  variant?: 'primary' | 'secondary';
+}
+
+const Button = ({ children, className, onClick, disabled = false, variant = 'primary' }: ButtonProps) => {
+  const baseStyles =
+    'px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md flex items-center justify-center';
+
+  const variants = {
+    primary: 'bg-teal-600 text-white hover:bg-teal-700',
+    secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
+  };
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${baseStyles} ${variants[variant]} ${className ?? ''}`}
+    >
+      {children}
+    </button>
+  );
 };
-
 // Custom component to simulate the Card component
-const Card = ({ children, className }) => {
-    return (
-        <div
-            className={cn(
-                'bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden',
-                className
-            )}
-        >
-            {children}
-        </div>
-    );
+
+interface CardProps {
+  children: ReactNode;
+  className?: string;
+}
+
+const Card = ({ children, className }: CardProps) => {
+  return (
+    <div
+      className={cn(
+        'bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden',
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
 };
+
+
 
 // Custom component to simulate the Badge component
-const Badge = ({ children, className }) => {
-    return (
-        <span
-            className={cn('px-3 py-1 text-xs font-semibold rounded-full', className)}
-        >
-            {children}
-        </span>
-    );
+interface BadgeProps {
+  children: ReactNode;
+  className?: string;
+}
+
+const Badge = ({ children, className }: BadgeProps) => {
+  return (
+    <span
+      className={cn('px-3 py-1 text-xs font-semibold rounded-full', className)}
+    >
+      {children}
+    </span>
+  );
 };
 
 // Custom component for Alert.tsx
-const Alert = ({ title, message, type = 'info', onClose }) => {
-    const bgColor = type === 'error' ? 'bg-red-500' : 'bg-green-500';
-    const icon = type === 'error' ? <AlertTriangle size={24} /> : <CheckCircle2 size={24} />;
+interface AlertProps {
+  title: string;
+  message: string;
+  type?: 'info' | 'error';
+  onClose: () => void;
+}
 
-    return (
-        <div className={cn(
-            "fixed inset-x-4 top-4 z-50 p-4 rounded-xl shadow-lg text-white flex items-center justify-between",
-            bgColor
-        )}>
-            <div className="flex items-center">
-                {icon}
-                <div className="ml-4">
-                    <h4 className="font-bold">{title}</h4>
-                    <p className="text-sm">{message}</p>
-                </div>
-            </div>
-            <button onClick={onClose} className="p-1 rounded-full hover:bg-white/20 transition-colors">
-                <X size={20} />
-            </button>
+const Alert = ({ title, message, type = 'info', onClose }: AlertProps) => {
+  const bgColor = type === 'error' ? 'bg-red-500' : 'bg-green-500';
+  const icon =
+    type === 'error' ? <AlertTriangle size={24} /> : <CheckCircle2 size={24} />;
+
+  return (
+    <div
+      className={cn(
+        'fixed inset-x-4 top-4 z-50 p-4 rounded-xl shadow-lg text-white flex items-center justify-between',
+        bgColor
+      )}
+    >
+      <div className="flex items-center">
+        {icon}
+        <div className="ml-4">
+          <h4 className="font-bold">{title}</h4>
+          <p className="text-sm">{message}</p>
         </div>
-    );
+      </div>
+      <button
+        onClick={onClose}
+        className="p-1 rounded-full hover:bg-white/20 transition-colors"
+      >
+        <X size={20} />
+      </button>
+    </div>
+  );
 };
 
 // Custom component for Toast.tsx
-const Toast = ({ message, type = 'success', onClose }) => {
-    const bgColor = type === 'error' ? 'bg-red-500' : 'bg-teal-600';
-    const icon = type === 'error' ? <AlertTriangle size={20} /> : <CheckCircle2 size={20} />;
+interface ToastProps {
+  message: string;
+  type?: 'success' | 'error';
+  onClose: () => void;
+}
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            onClose();
-        }, 3000);
-        return () => clearTimeout(timer);
-    }, [onClose]);
+const Toast = ({ message, type = 'success', onClose }: ToastProps) => {
+  const bgColor = type === 'error' ? 'bg-red-500' : 'bg-teal-600';
+  const icon =
+    type === 'error' ? <AlertTriangle size={20} /> : <CheckCircle2 size={20} />;
 
-    return (
-        <div className={cn(
-            "fixed bottom-4 right-4 z-50 px-6 py-3 rounded-full shadow-lg text-white flex items-center",
-            bgColor
-        )}>
-            {icon}
-            <span className="ml-2 font-semibold">{message}</span>
-        </div>
-    );
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div
+      className={cn(
+        'fixed bottom-4 right-4 z-50 px-6 py-3 rounded-full shadow-lg text-white flex items-center',
+        bgColor
+      )}
+    >
+      {icon}
+      <span className="ml-2 font-semibold">{message}</span>
+    </div>
+  );
 };
-
 
 const CarDetails = ({ car }: { car: any }) => {
     const [showToast, setShowToast] = useState(false);
@@ -232,7 +244,7 @@ const CarDetails = ({ car }: { car: any }) => {
                             <div>
                                 <h1 className="text-2xl font-bold text-slate-900">{car.title}</h1>
                                 <p className="text-sm text-slate-500 mt-1">
-                                    <span className="mr-2"># {car.id}</span>
+                                    <span className="mr-2"># {car._id}</span>
                                     <span className="mr-2">|</span>
                                     <span className="mr-2">Share</span>
                                     <Share2 size={16} className="inline text-slate-500 mr-2" />
@@ -245,7 +257,7 @@ const CarDetails = ({ car }: { car: any }) => {
                         <Card className="p-0">
                             <img src={car.imageUrl} alt={car.title} className="w-full rounded-t-2xl object-cover h-96 sm:h-[600px]" />
                             <div className="flex p-4 space-x-2 overflow-x-auto bg-slate-100 rounded-b-2xl">
-                                {car.thumbnailUrls.map((url, index) => (
+                                {car.thumbnailUrls.map((url:string, index:number) => (
                                     <img key={index} src={url} alt={`Thumbnail ${index + 1}`} className="w-24 h-16 object-cover rounded-md cursor-pointer" />
                                 ))}
                             </div>
@@ -400,7 +412,7 @@ const CarDetails = ({ car }: { car: any }) => {
                             <h4 className="font-semibold text-slate-800">{car.dealerName}</h4>
                             <p className="text-sm text-slate-500">{car.dealerPhone}</p>
                             <div className="flex items-center justify-between mt-4">
-                                <Button variant="outline" className="text-sm px-4 py-2">View Inventory</Button>
+                                <Button variant="secondary" className="text-sm px-4 py-2">View Inventory</Button>
                             </div>
                             <div className="flex items-center mt-4 text-slate-600">
                                 <LocateFixed size={16} className="mr-2" />
@@ -420,7 +432,7 @@ const CarDetails = ({ car }: { car: any }) => {
 export default function App({ params }: { params: Promise<{ id: string }> }) {
     const [showAlert, setShowAlert] = useState(false);
     const unwrappedParams = React.use(params); // Unwrap the params promise
-    const car = mockCars.find(car => car.id === unwrappedParams.id);
+    const car = mockCars.find(car => car._id === unwrappedParams.id);
     if (!car) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">

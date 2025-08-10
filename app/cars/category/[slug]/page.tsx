@@ -1,20 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
+import { mockCars } from '@app/data/cars';
 
-// Mock data for car listings with a category property
-const mockCars = [
-  { id: '1', title: '2023 Mercedes-Benz C-Class', price: '64,980', location: 'Concord, ON', year: '2023', type: 'Sedan', category: 'sedan', imageUrl: 'https://placehold.co/400x300/22d3ee/ffffff?text=Mercedes' },
-  { id: '2', title: '2022 BMW 4 Series Convertible', price: '58,500', location: 'Toronto, ON', year: '2022', type: 'Convertible', category: 'convertible', imageUrl: 'https://placehold.co/400x300/60a5fa/ffffff?text=BMW' },
-  { id: '3', title: '2021 Audi A5 Convertible', price: '52,000', location: 'Mississauga, ON', year: '2021', type: 'Convertible', category: 'convertible', imageUrl: 'https://placehold.co/400x300/a3e635/ffffff?text=Audi' },
-  { id: '4', title: '2020 Ford Mustang GT', price: '45,000', location: 'Brampton, ON', year: '2020', type: 'Convertible', category: 'convertible', imageUrl: 'https://placehold.co/400x300/fbbf24/ffffff?text=Mustang' },
-];
-
-/**
- * The cars by category page component.
- * It filters and displays cars based on the category slug provided in the URL.
- */
-const CarsByCategoryPage = ({ params }: { params: { slug: string } }) => {
-  const category = params.slug;
+export default async function CarsByCategoryPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug: category } = await params;
   const filteredCars = mockCars.filter(car => car.category === category);
 
   return (
@@ -25,7 +18,7 @@ const CarsByCategoryPage = ({ params }: { params: { slug: string } }) => {
       {filteredCars.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCars.map((car) => (
-            <Link href={`/cars/${car.id}`} key={car.id}>
+            <Link href={`/cars/${car._id}`} key={car._id}>
               <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer">
                 <img src={car.imageUrl} alt={car.title} className="w-full h-48 object-cover" />
                 <div className="p-5">
@@ -47,6 +40,4 @@ const CarsByCategoryPage = ({ params }: { params: { slug: string } }) => {
       )}
     </div>
   );
-};
-
-export default CarsByCategoryPage;
+}

@@ -18,7 +18,7 @@ const CarGrid = ({ cars, onCarSelect, className }: CarGridProps) => {
   return (
     <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", className)}>
       {cars.map((car) => (
-        <CarCard key={car.id} car={car} onClick={() => onCarSelect(car)} />
+        <CarCard key={car._id} car={car} onClick={() => onCarSelect(car)} />
       ))}
     </div>
   );

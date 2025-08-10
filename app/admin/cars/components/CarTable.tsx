@@ -4,18 +4,11 @@ import React from 'react';
 import Link from 'next/link';
 import { Edit, Trash2 } from 'lucide-react';
 import { Button } from '@app/components/ui';
+import { ICar } from '@app/types/car';
 
-interface Car {
-  id: string;
-  title: string;
-  price: number;
-  year: string;
-  location: string;
-  imageUrl: string;
-}
 
 interface CarTableProps {
-  cars: Car[];
+  cars: ICar[];
   onDelete: (carId: string) => void;
 }
 
@@ -48,7 +41,7 @@ const CarTable = ({ cars, onDelete }: CarTableProps) => {
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {cars.map((car) => (
-            <tr key={car.id}>
+            <tr key={car._id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center">
                   <div className="flex-shrink-0 h-10 w-10">
@@ -70,12 +63,12 @@ const CarTable = ({ cars, onDelete }: CarTableProps) => {
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div className="flex justify-end gap-2">
-                  <Link href={`/admin/cars/edit/${car.id}`}>
+                  <Link href={`/admin/cars/edit/${car._id}`}>
                     <Button variant="ghost" size="icon" className="text-blue-500 hover:text-blue-700">
                       <Edit size={20} />
                     </Button>
                   </Link>
-                  <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-700" onClick={() => onDelete(car.id)}>
+                  <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-700" onClick={() => onDelete(car._id)}>
                     <Trash2 size={20} />
                   </Button>
                 </div>

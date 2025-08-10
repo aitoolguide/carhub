@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { MapPin } from 'lucide-react';
 import { Card } from '@app/components/ui';
+import { ICar } from '@app/types/car';
 
 interface Car {
   id: string;
@@ -14,7 +15,7 @@ interface Car {
 }
 
 interface SearchResultsProps {
-  cars: Car[];
+  cars: ICar[];
 }
 
 /**
@@ -27,7 +28,7 @@ const SearchResults = ({ cars }: SearchResultsProps) => {
       {cars.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {cars.map((car) => (
-            <Link href={`/cars/${car.id}`} key={car.id}>
+            <Link href={`/cars/${car._id}`} key={car._id}>
               <Card className="cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden">
                 <img src={car.imageUrl} alt={car.title} className="w-full h-48 object-cover" />
                 <div className="p-5">

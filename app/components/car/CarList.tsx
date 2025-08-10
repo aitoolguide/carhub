@@ -21,7 +21,7 @@ const CarList = ({ cars, onCarSelect, className }: CarListProps) => {
   return (
     <div className={cn("flex flex-col space-y-4", className)}>
       {cars.map((car) => (
-        <Card key={car.id} className="flex flex-col sm:flex-row p-4 gap-4 items-center">
+        <Card key={car._id} className="flex flex-col sm:flex-row p-4 gap-4 items-center">
           <img src={car.imageUrl} alt={car.title} className="w-full sm:w-64 h-48 object-cover rounded-xl flex-shrink-0" />
           <div className="flex-grow flex flex-col">
             <h3 className="text-xl font-bold text-slate-900">{car.title}</h3>

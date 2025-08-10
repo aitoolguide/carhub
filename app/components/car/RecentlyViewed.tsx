@@ -24,7 +24,7 @@ const RecentlyViewed = ({ cars, onCarSelect, className }: RecentlyViewedProps) =
       <h2 className="text-3xl font-bold mb-6">Recently Viewed</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {cars.map((car) => (
-          <CarCard key={car.id} car={car} onClick={() => onCarSelect(car)} />
+          <CarCard key={car._id} car={car} onClick={() => onCarSelect(car)} />
         ))}
       </div>
     </div>

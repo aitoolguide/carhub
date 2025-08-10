@@ -4,20 +4,10 @@ import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Car, Gauge, Calendar, MapPin } from 'lucide-react';
-
-interface CarData {
-  id: string;
-  title: string;
-  price: string;
-  mileage: string;
-  year: string;
-  location: string;
-  type: string;
-  imageUrl: string;
-}
+import { ICar } from '@app/types/car';
 
 interface FeaturedCarsProps {
-  cars: CarData[];
+  cars: ICar[];
   className?: string;
   onCarClick: (carId: string) => void;
 }
@@ -34,7 +24,7 @@ const FeaturedCars = ({ cars, className, onCarClick }: FeaturedCarsProps) => {
       <h2 className="text-3xl font-bold text-center mb-10">Featured Vehicles</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {cars.map((car) => (
-          <Card key={car.id} className="cursor-pointer hover:shadow-2xl transition-shadow duration-300" onClick={() => onCarClick(car.id)}>
+          <Card key={car._id} className="cursor-pointer hover:shadow-2xl transition-shadow duration-300" onClick={() => onCarClick(car._id)}>
             <img src={car.imageUrl} alt={car.title} className="w-full h-56 object-cover rounded-t-2xl" />
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2">{car.title}</h3>

@@ -1,3 +1,4 @@
+"use client";
 import { Button, Input } from '@app/components/ui';
 import React from 'react';
 
