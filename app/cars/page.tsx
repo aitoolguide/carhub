@@ -573,48 +573,20 @@ import { cn } from '@app/lib/utils';
 import { useRouter } from 'next/navigation';
 import { mockCars } from '@app/data/cars';
 import { CarCardProps, ICar } from '@app/types/car';
+import { CarList } from '@app/components/car/CarList';
+import { CarGrid } from '@app/components/car/CarGrid';
+import { CarDetails } from '@app/components/car/CarDetails';
+import { Card } from '@app/components/ui';
+import { CarFilters } from '@app/components/car/CarFilters';
+import { CarCheckboxFilterGroup } from '@app/components/car/CarCheckboxFilterGroup';
 
 // --- Mock Data & Components ---
 
 // Mock data for car listings
 
 // Reusable UI components
-interface CardProps {
-    children: ReactNode;
-    className?: string;
-}
-
-const Card = ({ children, className }: CardProps) => {
-    return (
-        <div
-            className={cn(
-                'bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden',
-                className
-            )}
-        >
-            {children}
-        </div>
-    );
-};
 
 
-interface BadgeProps {
-    children: ReactNode;
-    className?: string;
-}
-
-const Badge = ({ children, className }: BadgeProps) => {
-    return (
-        <span
-            className={cn(
-                'px-3 py-1 text-xs font-semibold rounded-full',
-                className
-            )}
-        >
-            {children}
-        </span>
-    );
-};
 
 interface ButtonProps {
     children: ReactNode;
@@ -672,66 +644,7 @@ const Select = ({ children, className = '', ...props }: SelectProps) => {
 };
 
 
-interface FilterSectionProps {
-    title: string;
-    children: ReactNode;
-    open: boolean;
-    onToggle: () => void;
-}
 
-const FilterSection = ({
-    title,
-    children,
-    open,
-    onToggle
-}: FilterSectionProps) => (
-    <div className="border-b border-gray-200">
-        <button
-            onClick={onToggle}
-            className="w-full flex justify-between items-center py-4 px-4 text-slate-700 hover:bg-slate-50 transition-colors"
-        >
-            <span className="font-semibold">{title}</span>
-            <ChevronDown
-                size={18}
-                className={cn('transition-transform', open && 'rotate-180')}
-            />
-        </button>
-        {open && <div className="p-4">{children}</div>}
-    </div>
-);
-
-interface CheckboxItem {
-    label: string;
-    count: number;
-}
-
-interface CheckboxFilterGroupProps {
-    title?: string;
-    items: CheckboxItem[];
-    selectedItems: string[];
-    onToggle: (label: string) => void;
-}
-
-const CheckboxFilterGroup = ({
-    title,
-    items,
-    selectedItems,
-    onToggle
-}: CheckboxFilterGroupProps) => (
-    <div className="space-y-2 text-sm">
-        {items.map((item) => (
-            <label key={item.label} className="flex items-center">
-                <input
-                    type="checkbox"
-                    className="mr-2 rounded text-blue-600 focus:ring-blue-500 border-gray-300"
-                    checked={selectedItems.includes(item.label)}
-                    onChange={() => onToggle(item.label)}
-                />
-                {item.label} ({item.count})
-            </label>
-        ))}
-    </div>
-);
 
 const getAvailableYears = () => {
     const years = mockCars
@@ -747,93 +660,8 @@ const availableYears = getAvailableYears();
 
 
 // Car Card for Grid View
-const CarCardGrid: FC<CarCardProps> = ({ car, onClick }) => (
-    <Card
-        className="flex flex-col h-full cursor-pointer"
-    >
-        <div className="relative">
-            <img
-                src={car.imageUrl}
-                alt={car?.imageAlt || `${car.year} ${car.make} ${car.carModel}`}
-                className="w-full h-48 object-cover rounded-t-xl"
-            />
-            <button
-                onClick={(e) => e.stopPropagation()}
-                className="absolute top-2 right-2 bg-white rounded-full p-2 text-slate-500 hover:text-red-500 transition-colors"
-            >
-                <Heart size={16} />
-            </button>
-        </div>
-        <div className="p-4 flex flex-col justify-between flex-1">
-            <div>
-                <h3 className="text-lg font-bold text-slate-900">
-                    {car.year} {car.make} {car.carModel}
-                </h3>
-                <p className="text-xl font-bold text-slate-700 mt-2">
-                    ${car.price.toLocaleString('en-US')}
-                </p>
-                <div className="flex items-center mt-2 text-sm text-slate-500">
-                    <Gauge size={14} className="mr-1" />
-                    <span>{car.mileage?.toLocaleString('en-US')} km</span>
-                </div>
-                <p className="text-xs text-slate-400 mt-1">{car.drivetrain}</p>
-            </div>
-            <div className="mt-4 flex flex-wrap gap-2 items-center">
-                {car.isGoodDeal && (
-                    <Badge className="bg-green-100 text-green-700">Good Deal</Badge>
-                )}
-                <Badge className="bg-slate-100 text-slate-700">{car.dealerName}</Badge>
-            </div>
-        </div>
-    </Card>
-);
 
-interface CarCardListProps {
-    car: ICar;
-    onClick: (car: ICar) => void;
-}
-// Car Card for List View
-const CarCardList: FC<CarCardProps> = ({ car, onClick }) => (
-    <Card
 
-        className="flex flex-col sm:flex-row overflow-hidden shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
-    >
-        <div className="w-full sm:w-1/3 flex-shrink-0 relative">
-            <img
-                src={car.imageUrl}
-                alt={car?.imageAlt || `${car.year} ${car.make} ${car.carModel}`}
-                className="w-full h-48 sm:h-full object-cover"
-            />
-            <button
-                onClick={(e) => e.stopPropagation()}
-                className="absolute top-2 left-2 bg-white rounded-full p-2 text-slate-500 hover:text-red-500 transition-colors"
-            >
-                <Heart size={16} />
-            </button>
-        </div>
-        <div className="w-full sm:w-2/3 p-4 flex flex-col justify-between">
-            <div>
-                <h3 className="text-lg font-bold text-slate-900">
-                    {car.year} {car.make} {car.carModel}
-                </h3>
-                <p className="text-2xl font-bold text-slate-700 mt-2">
-                    ${car.price.toLocaleString('en-US')}
-                </p>
-                <div className="flex items-center mt-2 text-sm text-slate-500">
-                    <Gauge size={14} className="mr-1" />
-                    <span>{car.mileage?.toLocaleString('en-US')} km</span>
-                </div>
-                <p className="text-xs text-slate-400 mt-1">{car.drivetrain}</p>
-            </div>
-            <div className="mt-4 flex flex-wrap gap-2 items-center">
-                {car.isGoodDeal && (
-                    <Badge className="bg-green-100 text-green-700">Good Deal</Badge>
-                )}
-                <Badge className="bg-slate-100 text-slate-700">{car.dealerName}</Badge>
-            </div>
-        </div>
-    </Card>
-);
 
 // Promo Card
 const PromoCard = () => (
@@ -849,77 +677,7 @@ const PromoCard = () => (
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-white/20 rounded-full blur-xl animate-pulse"></div>
     </Card>
 );
-interface CarDetailProps {
-    car: ICar;
-    onBackClick: () => void;
-}
-const CarDetailPage: FC<CarDetailProps> = ({ car, onBackClick }) => (
-    <div className="min-h-screen bg-slate-50 antialiased font-sans text-slate-800 p-8">
-        <Button onClick={onBackClick} variant="outline" className="mb-6">
-            <ChevronLeft size={20} className="mr-2" />
-            Back to Listings
-        </Button>
-        <div className="bg-white rounded-xl shadow-lg p-6 md:p-10">
-            <div className="flex flex-col md:flex-row gap-8">
-                <div className="md:w-2/3">
-                    <img src={car.imageUrl} alt={`${car.year} ${car.make} ${car.model}`} className="w-full h-96 object-cover rounded-xl shadow-md" />
-                </div>
-                <div className="md:w-1/3">
-                    <h1 className="text-3xl font-bold text-slate-900">{car.year} {car.make} {car.model}</h1>
-                    <p className="text-4xl font-black text-blue-600 mt-2">${car.price.toLocaleString('en-US')}</p>
-                    <div className="mt-4 flex flex-wrap gap-2 items-center">
-                        {car.isGoodDeal && <Badge className="bg-green-100 text-green-700">Good Deal</Badge>}
-                        <Badge className="bg-slate-100 text-slate-700">{car.condition}</Badge>
-                        <Badge className="bg-slate-100 text-slate-700">{car.bodyType}</Badge>
-                    </div>
-                    <div className="mt-6 space-y-3">
-                        <div className="flex items-center text-slate-700">
-                            <MapPin size={20} className="mr-2 text-blue-600" />
-                            <span>{car.location}</span>
-                        </div>
-                        <div className="flex items-center text-slate-700">
-                            <Gauge size={20} className="mr-2 text-blue-600" />
-                            <span>{car.mileage?.toLocaleString('en-US')} km</span>
-                        </div>
-                        <div className="flex items-center text-slate-700">
-                            <Car size={20} className="mr-2 text-blue-600" />
-                            <span>{car.drivetrain}</span>
-                        </div>
-                        <div className="flex items-center text-slate-700">
-                            <Fuel size={20} className="mr-2 text-blue-600" />
-                            <span>{car.fuelType}</span>
-                        </div>
-                        <div className="flex items-center text-slate-700">
-                            <Settings size={20} className="mr-2 text-blue-600" />
-                            <span>{car.transmission}</span>
-                        </div>
-                    </div>
-                    <div className="mt-8 flex gap-4">
-                        <Button className="flex-1">Contact Seller</Button>
-                        <Button variant="outline" className="p-3">
-                            <Heart size={20} />
-                        </Button>
-                        <Button variant="outline" className="p-3">
-                            <Share2 size={20} />
-                        </Button>
-                    </div>
-                </div>
-            </div>
 
-            <div className="mt-12">
-                <h2 className="text-2xl font-bold text-slate-900 border-b pb-4">Key Features</h2>
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {car.features?.map(feature => (
-                        <div key={feature} className="flex items-center bg-gray-50 p-3 rounded-lg text-slate-700">
-                            <Check size={18} className="mr-2 text-green-500" />
-                            <span>{feature}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    </div>
-);
 interface ActiveFilters {
     condition: string[];
     make: string[];
@@ -974,7 +732,7 @@ export default function App() {
     const [view, setView] = useState('grid'); // 'grid' or 'list'
     const [selectedCar, setSelectedCar] = useState(null);
     const router = useRouter();
-    const toggleFilterSection = (filter: FilterKey) => {
+    const toggleCarFilters = (filter: FilterKey) => {
         setFilterStates(prev => ({ ...prev, [filter]: !prev[filter] }));
     };
 
@@ -1124,7 +882,7 @@ export default function App() {
 
     // Main render logic
     if (selectedCar) {
-        return <CarDetailPage car={selectedCar} onBackClick={() => setSelectedCar(null)} />;
+        return <CarDetails car={selectedCar} onBackClick={() => setSelectedCar(null)} />;
     }
 
     return (
@@ -1141,7 +899,7 @@ export default function App() {
                         <Button variant="outline" onClick={clearFilters} className="text-xs">Clear</Button>
                     </div>
                     <div className="h-[calc(100vh-64px)] overflow-y-auto">
-                        <FilterSection title="Location" open={filterStates.location} onToggle={() => toggleFilterSection('location')}>
+                        <CarFilters title="Location" open={filterStates.location} onToggle={() => toggleCarFilters('location')}>
                             <div className="space-y-4">
                                 <div className="relative">
                                     <input
@@ -1158,15 +916,15 @@ export default function App() {
                                     <option>50 km</option>
                                 </Select>
                             </div>
-                        </FilterSection>
-                        <FilterSection title="Condition" open={filterStates.condition} onToggle={() => toggleFilterSection('condition')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Condition" open={filterStates.condition} onToggle={() => toggleCarFilters('condition')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.condition}
                                 selectedItems={activeFilters.condition}
                                 onToggle={(label) => handleCheckboxChange('condition', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Make & Model" open={filterStates.makeModel} onToggle={() => toggleFilterSection('makeModel')}>
+                        </CarFilters>
+                        <CarFilters title="Make & Model" open={filterStates.makeModel} onToggle={() => toggleCarFilters('makeModel')}>
                             <div className="space-y-4">
                                 <Select value={activeFilters.make[0] || ''} onChange={(e) => setActiveFilters(prev => ({ ...prev, make: e.target.value ? [e.target.value] : [] }))}>
                                     <option value="">Select Makes</option>
@@ -1177,8 +935,8 @@ export default function App() {
                                     {['Escape', 'CR-V', 'Civic Type R', 'Eclipse Cross', 'RVR', 'CLA-Class', '5 Series', 'Forester', 'F-150', 'GLC-Class', 'GLE-Class', 'Sierra 1500'].map(model => <option key={model} value={model}>{model}</option>)}
                                 </Select>
                             </div>
-                        </FilterSection>
-                        <FilterSection title="Year" open={filterStates.year} onToggle={() => toggleFilterSection('year')}>
+                        </CarFilters>
+                        <CarFilters title="Year" open={filterStates.year} onToggle={() => toggleCarFilters('year')}>
                             <div className="flex space-x-2">
                                 <Select
                                     className="flex-1"
@@ -1198,8 +956,8 @@ export default function App() {
                                     {availableYears.map(year => <option key={year} value={year}>{year}</option>)}
                                 </Select>
                             </div>
-                        </FilterSection>
-                        <FilterSection title="Price ($)" open={filterStates.price} onToggle={() => toggleFilterSection('price')}>
+                        </CarFilters>
+                        <CarFilters title="Price ($)" open={filterStates.price} onToggle={() => toggleCarFilters('price')}>
                             <p className="text-sm font-semibold">${activeFilters.minPrice.toLocaleString('en-US')} - ${activeFilters.maxPrice.toLocaleString('en-US')}</p>
                             <input
                                 type="range"
@@ -1219,29 +977,29 @@ export default function App() {
                                 onChange={(e) => setActiveFilters(prev => ({ ...prev, maxPrice: parseInt(e.target.value) }))}
                                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                             />
-                        </FilterSection>
-                        <FilterSection title="Body Type" open={filterStates.bodyType} onToggle={() => toggleFilterSection('bodyType')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Body Type" open={filterStates.bodyType} onToggle={() => toggleCarFilters('bodyType')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.bodyType}
                                 selectedItems={activeFilters.bodyType}
                                 onToggle={(label) => handleCheckboxChange('bodyType', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Exterior Colour" open={filterStates.exteriorColor} onToggle={() => toggleFilterSection('exteriorColor')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Exterior Colour" open={filterStates.exteriorColor} onToggle={() => toggleCarFilters('exteriorColor')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.exteriorColor}
                                 selectedItems={activeFilters.exteriorColor}
                                 onToggle={(label) => handleCheckboxChange('exteriorColor', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Interior Colour" open={filterStates.interiorColor} onToggle={() => toggleFilterSection('interiorColor')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Interior Colour" open={filterStates.interiorColor} onToggle={() => toggleCarFilters('interiorColor')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.interiorColor}
                                 selectedItems={activeFilters.interiorColor}
                                 onToggle={(label) => handleCheckboxChange('interiorColor', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Mileage" open={filterStates.mileage} onToggle={() => toggleFilterSection('mileage')}>
+                        </CarFilters>
+                        <CarFilters title="Mileage" open={filterStates.mileage} onToggle={() => toggleCarFilters('mileage')}>
                             <p className="text-sm font-semibold">{activeFilters.minMileage.toLocaleString('en-US')} km - {activeFilters.maxMileage.toLocaleString('en-US')} km</p>
                             <input
                                 type="range"
@@ -1261,64 +1019,64 @@ export default function App() {
                                 onChange={(e) => setActiveFilters(prev => ({ ...prev, maxMileage: parseInt(e.target.value) }))}
                                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                             />
-                        </FilterSection>
-                        <FilterSection title="Drivetrain" open={filterStates.drivetrain} onToggle={() => toggleFilterSection('drivetrain')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Drivetrain" open={filterStates.drivetrain} onToggle={() => toggleCarFilters('drivetrain')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.drivetrain}
                                 selectedItems={activeFilters.drivetrain}
                                 onToggle={(label) => handleCheckboxChange('drivetrain', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Fuel Type" open={filterStates.fuelType} onToggle={() => toggleFilterSection('fuelType')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Fuel Type" open={filterStates.fuelType} onToggle={() => toggleCarFilters('fuelType')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.fuelType}
                                 selectedItems={activeFilters.fuelType}
                                 onToggle={(label) => handleCheckboxChange('fuelType', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Number of cylinders" open={filterStates.cylinders} onToggle={() => toggleFilterSection('cylinders')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Number of cylinders" open={filterStates.cylinders} onToggle={() => toggleCarFilters('cylinders')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.cylinders}
                                 selectedItems={activeFilters.cylinders}
                                 onToggle={(label) => handleCheckboxChange('cylinders', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Transmission" open={filterStates.transmission} onToggle={() => toggleFilterSection('transmission')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Transmission" open={filterStates.transmission} onToggle={() => toggleCarFilters('transmission')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.transmission}
                                 selectedItems={activeFilters.transmission}
                                 onToggle={(label) => handleCheckboxChange('transmission', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Number of seats" open={filterStates.seats} onToggle={() => toggleFilterSection('seats')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Number of seats" open={filterStates.seats} onToggle={() => toggleCarFilters('seats')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.seats}
                                 selectedItems={activeFilters.seats}
                                 onToggle={(label) => handleCheckboxChange('seats', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Number of doors" open={filterStates.doors} onToggle={() => toggleFilterSection('doors')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Number of doors" open={filterStates.doors} onToggle={() => toggleCarFilters('doors')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.doors}
                                 selectedItems={activeFilters.doors}
                                 onToggle={(label) => handleCheckboxChange('doors', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Features" open={filterStates.features} onToggle={() => toggleFilterSection('features')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Features" open={filterStates.features} onToggle={() => toggleCarFilters('features')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.features}
                                 selectedItems={activeFilters.features}
                                 onToggle={(label) => handleCheckboxChange('features', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Seller Type" open={filterStates.seller} onToggle={() => toggleFilterSection('seller')}>
-                            <CheckboxFilterGroup
+                        </CarFilters>
+                        <CarFilters title="Seller Type" open={filterStates.seller} onToggle={() => toggleCarFilters('seller')}>
+                            <CarCheckboxFilterGroup
                                 items={availableFilters.sellerType}
                                 selectedItems={activeFilters.seller}
                                 onToggle={(label) => handleCheckboxChange('seller', label)}
                             />
-                        </FilterSection>
-                        <FilterSection title="Photos" open={filterStates.photos} onToggle={() => toggleFilterSection('photos')}>
+                        </CarFilters>
+                        <CarFilters title="Photos" open={filterStates.photos} onToggle={() => toggleCarFilters('photos')}>
                             <div className="space-y-2 text-sm">
                                 <label className="flex items-center">
                                     <input
@@ -1330,8 +1088,8 @@ export default function App() {
                                     Hide vehicles without photos
                                 </label>
                             </div>
-                        </FilterSection>
-                        <FilterSection title="Keyword Search" open={filterStates.keyword} onToggle={() => toggleFilterSection('keyword')}>
+                        </CarFilters>
+                        <CarFilters title="Keyword Search" open={filterStates.keyword} onToggle={() => toggleCarFilters('keyword')}>
                             <div className="relative">
                                 <input
                                     type="text"
@@ -1342,7 +1100,7 @@ export default function App() {
                                 />
                                 <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             </div>
-                        </FilterSection>
+                        </CarFilters>
                     </div>
                 </div>
 
@@ -1387,7 +1145,7 @@ export default function App() {
                     {/* Car Listings */}
                     <div className={cn("gap-6", view === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "flex flex-col")}>
                         {paginatedCars.map((car) =>
-                            car.type === 'car' ? (view === 'grid' ? <CarCardGrid key={car._id} car={car} onClick={() => { router.push(`/cars/${car._id}`) }} /> : <CarCardList key={car._id} car={car} onClick={() => { router.push(`/cars/${car._id}`) }} />) : <PromoCard key={car._id} />
+                            car.type === 'car' ? (view === 'grid' ? <CarGrid key={car._id} car={car} onClick={() => { router.push(`/cars/${car._id}`) }} /> : <CarList key={car._id} car={car} onClick={() => { router.push(`/cars/${car._id}`) }} />) : <PromoCard key={car._id} />
                         )}
                     </div>
 
