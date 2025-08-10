@@ -1,0 +1,453 @@
+// import React from 'react';
+// import Link from 'next/link';
+
+// // Mock data for car details (a more detailed version)
+// const mockCarsData = {
+//   '1': { id: '1', title: '2023 Mercedes-Benz C-Class', price: '64,980', description: 'A luxurious sedan with advanced features and a powerful engine.', imageUrl: 'https://placehold.co/800x600/22d3ee/ffffff?text=Mercedes' },
+//   '2': { id: '2', title: '2022 BMW 4 Series Convertible', price: '58,500', description: 'A sporty convertible perfect for weekend drives.', imageUrl: 'https://placehold.co/800x600/60a5fa/ffffff?text=BMW' },
+//   '3': { id: '3', title: '2021 Audi A5 Convertible', price: '52,000', description: 'Elegant design and a comfortable ride with a convertible top.', imageUrl: 'https://placehold.co/800x600/a3e635/ffffff?text=Audi' },
+//   '4': { id: '4', title: '2020 Ford Mustang GT', price: '45,000', description: 'An iconic muscle car with a powerful V8 engine.', imageUrl: 'https://placehold.co/800x600/fbbf24/ffffff?text=Mustang' },
+// };
+
+// /**
+//  * The individual car details page component.
+//  * It fetches and displays detailed information about a single car based on its ID.
+//  */
+// const CarDetailsPage = ({ params }: { params: { id: string } }) => {
+//   const car = mockCarsData[params.id as keyof typeof mockCarsData];
+
+//   if (!car) {
+//     return (
+//       <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
+//         <h1 className="text-3xl font-bold text-red-500">Car Not Found</h1>
+//         <p className="mt-2 text-gray-600">The requested car ID does not exist.</p>
+//         <Link href="/cars">
+//           <button className="mt-4 px-6 py-3 rounded-md text-white bg-teal-500 hover:bg-teal-600 transition-colors">
+//             Back to Listings
+//           </button>
+//         </Link>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+//       <Link href="/cars">
+//         <button className="mb-6 px-4 py-2 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors">
+//           &larr; Back to Listings
+//         </button>
+//       </Link>
+//       <div className="bg-white rounded-xl shadow-lg p-8">
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+//           <div>
+//             <img src={car.imageUrl} alt={car.title} className="w-full h-auto rounded-xl" />
+//           </div>
+//           <div>
+//             <h1 className="text-4xl font-bold text-gray-900">{car.title}</h1>
+//             <p className="text-3xl font-extrabold text-teal-600 mt-2">${car.price}</p>
+//             <p className="mt-6 text-lg text-gray-700 leading-relaxed">
+//               {car.description}
+//             </p>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CarDetailsPage;
+
+
+
+
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import {
+    Car,
+    ChevronLeft,
+    Phone,
+    Mail,
+    LocateFixed,
+    Euro,
+    Gauge,
+    Fuel,
+    Calendar,
+    Zap,
+    ChevronRight,
+    ChevronDown,
+    X,
+    AlertTriangle,
+    CheckCircle2,
+    Share2,
+    Heart,
+    CarIcon,
+    Ruler,
+    Paintbrush,
+    Cog,
+} from 'lucide-react';
+import { cn } from '@app/lib/utils';
+import { mockCars } from '@app/data/cars';
+import Link from '@node_modules/next/link';
+
+// Mock data based on the provided reference website image
+// const mockCar = {
+//     id: '130520',
+//     title: '2018 Mercedes-Benz C-Class',
+//     price: '30,888',
+//     goodDeal: true,
+//     mileage: '96,878',
+//     year: '2018',
+//     bodyType: 'Convertible',
+//     transmission: 'Automatic',
+//     drivetrain: 'All-Wheel Drive',
+//     interiorColor: 'Black',
+//     exteriorColor: 'Black',
+//     cylinders: '4',
+//     fuelType: 'Gasoline',
+//     condition: 'Used',
+//     engine: '2.0L Turbo I4',
+//     imageUrl: 'https://placehold.co/800x600/22d3ee/ffffff?text=Mercedes+C-Class',
+//     thumbnailUrls: [
+//         'https://placehold.co/120x80/60a5fa/ffffff?text=Thumbnail+1',
+//         'https://placehold.co/120x80/a3e635/ffffff?text=Thumbnail+2',
+//         'https://placehold.co/120x80/fde047/ffffff?text=Thumbnail+3',
+//     ],
+//     description: `Buy With Confidence - Clean CarFax,Special Financing Price / Cash Price: $32,888|2018 Mercedes-Benz C-Class 300 4Matic Convertible / Premium Package / Sport Package / Premium Plus Package / Sport Package / Intelligent Drive Package (Distronic Plus) / Exterior: Obsidian Black Metallic. Interior: Premium Black Leather. This 2018 Mercedes-Benz C300 Cabriolet 4Matic offers open-top luxury with the confidence of all-wheel drive. Enhanced by a Sport Package, it provides an exhilarating drive. Finished in a timeless Obsidian Black Metallic, its sleek design is elevated by the Sport Package for...`,
+//     fuelEconomyCity: '10.7',
+//     fuelEconomyHighway: '7.6',
+//     features: ['N/A'], // Based on the image showing "N/A"
+//     dealerName: 'Yorkdale Fine Cars',
+//     dealerPhone: '(416) 792-4447',
+//     dealerAddress: '8132 Keele St, Concord Ontario L4K 172, CA',
+// };
+
+// Custom component to simulate the Button component
+const Button = ({ children, className, onClick, disabled = false, variant = 'primary' }) => {
+    const baseStyles = 'px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md flex items-center justify-center';
+    const variants = {
+        primary: 'bg-teal-600 text-white hover:bg-teal-700',
+        secondary: 'bg-slate-100 text-slate-700 hover:bg-slate-200',
+        outline: 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50',
+    };
+    return (
+        <button
+            onClick={onClick}
+            disabled={disabled}
+            className={cn(baseStyles, variants[variant], disabled && 'opacity-50 cursor-not-allowed', className)}
+        >
+            {children}
+        </button>
+    );
+};
+
+// Custom component to simulate the Card component
+const Card = ({ children, className }) => {
+    return (
+        <div
+            className={cn(
+                'bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden',
+                className
+            )}
+        >
+            {children}
+        </div>
+    );
+};
+
+// Custom component to simulate the Badge component
+const Badge = ({ children, className }) => {
+    return (
+        <span
+            className={cn('px-3 py-1 text-xs font-semibold rounded-full', className)}
+        >
+            {children}
+        </span>
+    );
+};
+
+// Custom component for Alert.tsx
+const Alert = ({ title, message, type = 'info', onClose }) => {
+    const bgColor = type === 'error' ? 'bg-red-500' : 'bg-green-500';
+    const icon = type === 'error' ? <AlertTriangle size={24} /> : <CheckCircle2 size={24} />;
+
+    return (
+        <div className={cn(
+            "fixed inset-x-4 top-4 z-50 p-4 rounded-xl shadow-lg text-white flex items-center justify-between",
+            bgColor
+        )}>
+            <div className="flex items-center">
+                {icon}
+                <div className="ml-4">
+                    <h4 className="font-bold">{title}</h4>
+                    <p className="text-sm">{message}</p>
+                </div>
+            </div>
+            <button onClick={onClose} className="p-1 rounded-full hover:bg-white/20 transition-colors">
+                <X size={20} />
+            </button>
+        </div>
+    );
+};
+
+// Custom component for Toast.tsx
+const Toast = ({ message, type = 'success', onClose }) => {
+    const bgColor = type === 'error' ? 'bg-red-500' : 'bg-teal-600';
+    const icon = type === 'error' ? <AlertTriangle size={20} /> : <CheckCircle2 size={20} />;
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            onClose();
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, [onClose]);
+
+    return (
+        <div className={cn(
+            "fixed bottom-4 right-4 z-50 px-6 py-3 rounded-full shadow-lg text-white flex items-center",
+            bgColor
+        )}>
+            {icon}
+            <span className="ml-2 font-semibold">{message}</span>
+        </div>
+    );
+};
+
+
+const CarDetails = ({ car }: { car: any }) => {
+    const [showToast, setShowToast] = useState(false);
+    const [showMoreDescription, setShowMoreDescription] = useState(false);
+    const handleContactDealer = () => {
+        // Simulate contact form submission or action
+        setShowToast(true);
+    };
+    
+    return (
+        <>
+            {car && <div className="p-4 md:p-8 lg:p-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Left Column: Main Content */}
+                    <div className="lg:col-span-2 space-y-6">
+                        <div className="flex justify-between items-start mb-4">
+                            <div>
+                                <h1 className="text-2xl font-bold text-slate-900">{car.title}</h1>
+                                <p className="text-sm text-slate-500 mt-1">
+                                    <span className="mr-2"># {car.id}</span>
+                                    <span className="mr-2">|</span>
+                                    <span className="mr-2">Share</span>
+                                    <Share2 size={16} className="inline text-slate-500 mr-2" />
+                                    <span className="mr-2">Save</span>
+                                    <Heart size={16} className="inline text-slate-500" />
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <Card className="p-0">
+                            <img src={car.imageUrl} alt={car.title} className="w-full rounded-t-2xl object-cover h-96 sm:h-[600px]" />
+                            <div className="flex p-4 space-x-2 overflow-x-auto bg-slate-100 rounded-b-2xl">
+                                {car.thumbnailUrls.map((url, index) => (
+                                    <img key={index} src={url} alt={`Thumbnail ${index + 1}`} className="w-24 h-16 object-cover rounded-md cursor-pointer" />
+                                ))}
+                            </div>
+                        </Card>
+
+                        <Card className="p-6">
+                            <h3 className="text-lg font-bold text-slate-900 mb-4">Specifications</h3>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4">
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 mr-4">
+                                        <Ruler size={20} className="text-teal-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-slate-500">Body Type</p>
+                                        <p className="font-semibold text-slate-700">{car.bodyType}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 mr-4">
+                                        <Cog size={20} className="text-teal-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-slate-500">Transmission</p>
+                                        <p className="font-semibold text-slate-700">{car.transmission}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 mr-4">
+                                        <Gauge size={20} className="text-teal-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-slate-500">Mileage</p>
+                                        <p className="font-semibold text-slate-700">{car.mileage} km</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 mr-4">
+                                        <CarIcon size={20} className="text-teal-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-slate-500">Drivetrain</p>
+                                        <p className="font-semibold text-slate-700">{car.drivetrain}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 mr-4">
+                                        <Paintbrush size={20} className="text-teal-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-slate-500">Interior Color</p>
+                                        <p className="font-semibold text-slate-700">{car.interiorColor}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 mr-4">
+                                        <Paintbrush size={20} className="text-teal-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-slate-500">Exterior Color</p>
+                                        <p className="font-semibold text-slate-700">{car.exteriorColor}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 mr-4">
+                                        <Euro size={20} className="text-teal-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-slate-500">Cylinders</p>
+                                        <p className="font-semibold text-slate-700">{car.cylinders}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 mr-4">
+                                        <Fuel size={20} className="text-teal-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-slate-500">Fuel Type</p>
+                                        <p className="font-semibold text-slate-700">{car.fuelType}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </Card>
+
+                        <Card className="p-6">
+                            <h3 className="text-lg font-bold text-slate-900 mb-4">Description</h3>
+                            <div className={cn('text-slate-600 leading-relaxed text-sm', !showMoreDescription && 'line-clamp-3')}>
+                                <p>{car.description}</p>
+                            </div>
+                            <button
+                                onClick={() => setShowMoreDescription(!showMoreDescription)}
+                                className="mt-4 flex items-center font-semibold text-teal-600 hover:text-teal-700"
+                            >
+                                {showMoreDescription ? 'Read less' : 'Read more'}
+                                <ChevronDown size={16} className={cn('ml-1 transition-transform', showMoreDescription && 'rotate-180')} />
+                            </button>
+                        </Card>
+
+                        <Card className="p-6">
+                            <h3 className="text-lg font-bold text-slate-900 mb-4">Fuel Economy</h3>
+                            <div className="flex justify-between items-end border-b pb-4">
+                                <div className="text-center">
+                                    <p className="text-3xl font-bold">{car.fuelEconomyCity}</p>
+                                    <p className="text-sm text-slate-500">L/100km</p>
+                                    <p className="font-semibold text-slate-700">City</p>
+                                </div>
+                                <div className="text-center">
+                                    <div className="w-24 h-1 bg-slate-200"></div>
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-3xl font-bold">{car.fuelEconomyHighway}</p>
+                                    <p className="text-sm text-slate-500">L/100km</p>
+                                    <p className="font-semibold text-slate-700">Highway</p>
+                                </div>
+                            </div>
+                        </Card>
+
+                        <Card className="p-6">
+                            <h3 className="text-lg font-bold text-slate-900 mb-4">Features</h3>
+                            <p className="text-sm text-slate-600">N/A</p>
+                        </Card>
+                    </div>
+
+                    {/* Right Column: Dealer Info and Contact Form */}
+                    <div className="lg:col-span-1 space-y-6">
+                        <Card className="p-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <p className="text-2xl font-bold text-teal-600">${car.price}</p>
+                                {car.goodDeal && <Badge className="bg-green-100 text-green-700">Good Deal</Badge>}
+                            </div>
+                            <div className="border-t pt-4">
+                                <h4 className="font-semibold text-slate-800">{car.dealerName}</h4>
+                                <p className="text-sm text-slate-500">{car.dealerPhone}</p>
+                                <p className="text-sm text-slate-500">{car.dealerAddress}</p>
+                            </div>
+                        </Card>
+
+                        <Card className="p-6">
+                            <div className="space-y-4">
+                                <input type="text" placeholder="First Name" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                                <input type="text" placeholder="Last Name" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                                <input type="email" placeholder="Email Address" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                                <input type="phone" placeholder="Phone" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                                <textarea placeholder="Message" rows={4} className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                                <Button onClick={handleContactDealer} className="w-full">
+                                    <Mail size={20} className="mr-2" />
+                                    Send Email
+                                </Button>
+                            </div>
+                        </Card>
+
+                        <Card className="p-6">
+                            <h4 className="font-semibold text-slate-800">{car.dealerName}</h4>
+                            <p className="text-sm text-slate-500">{car.dealerPhone}</p>
+                            <div className="flex items-center justify-between mt-4">
+                                <Button variant="outline" className="text-sm px-4 py-2">View Inventory</Button>
+                            </div>
+                            <div className="flex items-center mt-4 text-slate-600">
+                                <LocateFixed size={16} className="mr-2" />
+                                <p className="text-sm">{car.dealerAddress}</p>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
+                {showToast && <Toast message="Message sent to dealer successfully!" onClose={() => setShowToast(false)} />}
+            </div>}
+        </>
+
+    );
+};
+
+// Main App component
+export default function App({ params }: { params: Promise<{ id: string }> }) {
+    const [showAlert, setShowAlert] = useState(false);
+    const unwrappedParams = React.use(params); // Unwrap the params promise
+    const car = mockCars.find(car => car.id === unwrappedParams.id);
+    if (!car) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
+                <h1 className="text-3xl font-bold text-red-500">Car Not Found</h1>
+                <p className="mt-2 text-gray-600">The requested car ID does not exist.</p>
+                <Link href="/cars">
+                    <button className="mt-4 px-6 py-3 rounded-md text-white bg-teal-500 hover:bg-teal-600 transition-colors">
+                        Back to Listings
+                    </button>
+                </Link>
+            </div>
+        );
+    }
+    return (
+        <> 
+        {car && <div className="bg-slate-50 min-h-screen font-sans antialiased text-slate-800">
+            <script src="https://cdn.tailwindcss.com"></script>
+            <div className="container mx-auto">
+                {showAlert && <Alert
+                    title="Important Notice"
+                    message="Due to high demand, some vehicles may sell quickly. Contact us to confirm availability!"
+                    onClose={() => setShowAlert(false)}
+                    type="error"
+                />}
+                <CarDetails car={car} />
+            </div>
+        </div>}
+        </>
+    );
+}
