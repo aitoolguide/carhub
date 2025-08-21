@@ -1,7 +1,7 @@
 // src/hooks/useCars.ts
 import { useState, useEffect } from 'react';
-import { ICar } from '../types/car';
 import { apiClient } from '../lib/api-client';
+import { ICar } from '@app/database/models/Car';
 
 /**
  * A custom hook to fetch and manage a list of cars.

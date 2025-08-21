@@ -1,8 +1,9 @@
 // src/contexts/CartContext.tsx
 'use client';
 
+import { ICar } from '@app/database/models/Car';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { ICar } from '../types/car';
+
 
 interface CartItem extends ICar {
   quantity: number;

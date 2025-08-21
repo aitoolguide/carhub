@@ -1,10 +1,11 @@
 // src/database/seeders/cars.ts
 
-import dbConnect from './../../lib/mongodb';
+
 import mongoose from 'mongoose';
-import Car from '../models/Car';
+
 import Category from '../models/Category';
-import { ICar } from '../models/Car';
+import { Car, ICar } from '../models/Car';
+import { dbConnect } from '@app/lib/mongodb';
 
 export async function seedCars() {
   await dbConnect();

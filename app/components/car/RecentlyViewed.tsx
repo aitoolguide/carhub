@@ -1,10 +1,11 @@
 import React from 'react';
 import { cn } from '@app/lib/utils';
 import { CarCard } from './CarCard';
+import { ICar } from '@app/database/models/Car';
 
 interface RecentlyViewedProps {
-  cars: any[]; // Use a more specific type if available
-  onCarSelect: (car: any) => void;
+  cars: ICar[]; // Use a more specific type if available
+  onCarSelect: (car: ICar) => void;
   className?: string;
 }
 
@@ -23,7 +24,7 @@ const RecentlyViewed = ({ cars, onCarSelect, className }: RecentlyViewedProps) =
     <div className={cn("p-4 md:p-8", className)}>
       <h2 className="text-3xl font-bold mb-6">Recently Viewed</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {cars.map((car) => (
+        {cars.map((car:ICar) => (
           <CarCard key={car._id} car={car} onClick={() => onCarSelect(car)} />
         ))}
       </div>

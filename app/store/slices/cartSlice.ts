@@ -1,7 +1,8 @@
 // src/store/slices/cartSlice.ts
 
+import { ICar } from '@app/database/models/Car';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ICar } from '../../types/car';
+
 
 interface CartState {
   cartItems: ICar[];

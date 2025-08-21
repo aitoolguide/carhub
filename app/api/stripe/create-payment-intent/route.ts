@@ -3,8 +3,9 @@
 
 import { NextResponse } from 'next/server';
 import { createCheckoutSession } from '@app/lib/stripe';
-import Car from '@app/database/models/Car';
-import dbConnect from '@app/lib/mongodb';
+import { dbConnect } from '@app/lib/mongodb';
+import { Car } from '@app/database/models/Car';
+
 
 export async function POST(request: Request) {
   await dbConnect();

@@ -2,9 +2,10 @@
 // This route handles the creation of new orders.
 
 import { NextResponse } from 'next/server';
-import dbConnect from '@app/lib/mongodb';
+
 import Order from '@app/database/models/Order';
 import { IOrder } from '@app/types/order';
+import { dbConnect } from '@app/lib/mongodb';
 
 export async function POST(request: Request) {
   await dbConnect();

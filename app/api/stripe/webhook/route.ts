@@ -3,9 +3,10 @@
 
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import dbConnect from '@app/lib/mongodb';
+
 import Order from '@app/database/models/Order';
 import { stripe } from '@app/lib/stripe';
+import { dbConnect } from '@app/lib/mongodb';
 
 export async function POST(request: Request) {
   await dbConnect();

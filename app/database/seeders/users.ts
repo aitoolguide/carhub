@@ -1,6 +1,7 @@
 // src/database/seeders/users.ts
 
-import dbConnect from '../../lib/mongodb';
+
+import { dbConnect } from '@app/lib/mongodb';
 import User from '../models/User';
 import { IUser } from '../models/User';
 import mongoose from 'mongoose';

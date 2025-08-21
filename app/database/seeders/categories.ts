@@ -1,6 +1,7 @@
 // src/database/seeders/categories.ts
 
-import dbConnect from './../../lib/mongodb';
+
+import { dbConnect } from '@app/lib/mongodb';
 import Category from '../models/Category';
 import { ICategory } from '../models/Category';
 import mongoose from 'mongoose';

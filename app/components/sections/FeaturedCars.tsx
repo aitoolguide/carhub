@@ -4,7 +4,7 @@ import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Car, Gauge, Calendar, MapPin } from 'lucide-react';
-import { ICar } from '@app/types/car';
+import { ICar } from '@app/database/models/Car';
 
 interface FeaturedCarsProps {
   cars: ICar[];

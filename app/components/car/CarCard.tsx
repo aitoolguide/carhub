@@ -1,6 +1,6 @@
 // CarCard.tsx
 import React from 'react';
-import { ICar } from '@app/types/car';
+import { ICar } from '@app/database/models/Car';
 
 interface CarCardProps {
   car: ICar;

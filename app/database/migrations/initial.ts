@@ -3,8 +3,8 @@
 import { seedCategories } from '../seeders/categories';
 import { seedUsers } from '../seeders/users';
 import { seedCars } from '../seeders/cars';
-import dbConnect from '../../lib/mongodb';
 import mongoose from 'mongoose';
+import { dbConnect } from '@app/lib/mongodb';
 
 async function runMigration() {
   try {

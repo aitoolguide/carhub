@@ -1,592 +1,29 @@
-// import React from 'react';
-// import Link from 'next/link';
 
-// // Mock data for car listings
-// const mockCars = [
-//   { id: '1', title: '2023 Mercedes-Benz C-Class', price: '64,980', location: 'Concord, ON', year: '2023', type: 'Sedan', imageUrl: 'https://placehold.co/400x300/22d3ee/ffffff?text=Mercedes' },
-//   { id: '2', title: '2022 BMW 4 Series Convertible', price: '58,500', location: 'Toronto, ON', year: '2022', type: 'Convertible', imageUrl: 'https://placehold.co/400x300/60a5fa/ffffff?text=BMW' },
-//   { id: '3', title: '2021 Audi A5 Convertible', price: '52,000', location: 'Mississauga, ON', year: '2021', type: 'Convertible', imageUrl: 'https://placehold.co/400x300/a3e635/ffffff?text=Audi' },
-//   { id: '4', title: '2020 Ford Mustang GT', price: '45,000', location: 'Brampton, ON', year: '2020', type: 'Convertible', imageUrl: 'https://placehold.co/400x300/fbbf24/ffffff?text=Mustang' },
-// ];
-
-// /**
-//  * The main car listings page.
-//  * Displays a grid of all available cars with links to their detail pages.
-//  */
-// const CarsPage = () => {
-//   return (
-//     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-//       <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-8">
-//         All Car Listings
-//       </h1>
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//         {mockCars.map((car) => (
-//           <Link href={`/cars/${car._id}`} key={car._id}>
-//             <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer">
-//               <img src={car.imageUrl} alt={car.title} className="w-full h-48 object-cover" />
-//               <div className="p-5">
-//                 <h2 className="text-xl font-bold text-gray-900">{car.title}</h2>
-//                 <p className="text-2xl font-semibold text-teal-600 mt-2">${car.price}</p>
-//                 <div className="mt-4 text-sm text-gray-500">
-//                   <p>{car.year} &bull; {car.location}</p>
-//                   <p className="capitalize">Type: {car.type}</p>
-//                 </div>
-//               </div>
-//             </div>
-//           </Link>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CarsPage;
-
-
-// // 'use client';
-
-// // import React, { useState, useEffect } from 'react';
-// // import {
-// //   Car,
-// //   CheckCircle2,
-// //   Euro,
-// //   Car as CarIcon,
-// //   Fuel,
-// //   Gauge,
-// //   Calendar,
-// //   Zap,
-// //   MapPin,
-// //   ChevronLeft,
-// //   ChevronRight,
-// //   ShieldCheck,
-// //   Award,
-// //   Wallet,
-// //   Star,
-// //   Phone,
-// //   Mail,
-// //   LocateFixed,
-// //   Clock,
-// //   ExternalLink,
-// //   ChevronDown,
-// //   AlertTriangle,
-// //   X,
-// // } from 'lucide-react';
-// // import { cn } from '@app/lib/utils';
-
-// // // Mock data based on the provided reference website
-// // const mockCars = [
-// //   {
-// //     id: '130520',
-// //     title: '2023 Mercedes-Benz C-Class 300 4MATIC',
-// //     price: '64,980',
-// //     location: 'Concord, Ontario',
-// //     mileage: '15,640',
-// //     year: '2023',
-// //     type: 'Sedan',
-// //     fuel: 'Gasoline',
-// //     transmission: 'Automatic',
-// //     drivetrain: 'AWD',
-// //     engine: '2.0L Turbo I4',
-// //     imageUrl: 'https://placehold.co/800x600/22d3ee/ffffff?text=Mercedes+C-Class',
-// //     features: ['Apple CarPlay', 'Heated Seats', 'Backup Camera', 'Navigation System', 'Keyless Entry', 'Bluetooth'],
-// //     description: 'This is a pristine 2023 Mercedes-Benz C-Class with low mileage, offering a blend of luxury, performance, and advanced technology. The 4MATIC all-wheel drive system ensures confident handling in all conditions.',
-// //     dealerName: 'AutoBunny Canada',
-// //     dealerAddress: '123 Fake Street, Concord, ON',
-// //     dealerPhone: '416-555-0101',
-// //     dealerHours: 'Mon-Fri: 9am - 7pm',
-// //     dealerWebsite: 'https://www.autobunny.com',
-// //   },
-// //   {
-// //     id: '130521',
-// //     title: '2022 BMW 4 Series Convertible',
-// //     price: '58,500',
-// //     location: 'Toronto, Ontario',
-// //     mileage: '25,000',
-// //     year: '2022',
-// //     type: 'Convertible',
-// //     fuel: 'Gasoline',
-// //     transmission: 'Automatic',
-// //     drivetrain: 'RWD',
-// //     engine: '2.0L Turbo I4',
-// //     imageUrl: 'https://placehold.co/800x600/60a5fa/ffffff?text=BMW+4+Series',
-// //     features: ['Leather Seats', 'Navigation System', 'Keyless Entry'],
-// //     description: 'Stylish and sporty BMW 4 Series convertible. A joy to drive with a powerful engine and a comfortable, luxurious interior.',
-// //     dealerName: 'AutoBunny Toronto',
-// //     dealerAddress: '456 Fake Blvd, Toronto, ON',
-// //     dealerPhone: '416-555-0102',
-// //     dealerHours: 'Mon-Sat: 10am - 6pm',
-// //     dealerWebsite: 'https://www.autobunny.com',
-// //   },
-// //   {
-// //     id: '130522',
-// //     title: '2021 Audi A5 Convertible',
-// //     price: '52,000',
-// //     location: 'Mississauga, Ontario',
-// //     mileage: '35,000',
-// //     year: '2021',
-// //     type: 'Convertible',
-// //     fuel: 'Gasoline',
-// //     transmission: 'Automatic',
-// //     drivetrain: 'AWD',
-// //     engine: '2.0L Turbo I4',
-// //     imageUrl: 'https://placehold.co/800x600/a3e635/ffffff?text=Audi+A5',
-// //     features: ['Virtual Cockpit', 'Heated Steering Wheel', 'Adaptive Cruise Control'],
-// //     description: 'Elegant Audi A5 with a smooth ride and advanced quattro all-wheel drive system. Perfect for both city driving and long road trips.',
-// //     dealerName: 'AutoBunny Mississauga',
-// //     dealerAddress: '789 Fake Rd, Mississauga, ON',
-// //     dealerPhone: '905-555-0103',
-// //     dealerHours: 'Mon-Fri: 9:30am - 8pm',
-// //     dealerWebsite: 'https://www.autobunny.com',
-// //   },
-// // ];
-
-// // // Custom component to simulate the Button component
-// // const Button = ({ children, className, onClick, disabled = false, variant = 'primary' }) => {
-// //   const baseStyles = 'px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md flex items-center justify-center';
-// //   const variants = {
-// //     primary: 'bg-teal-600 text-white hover:bg-teal-700',
-// //     secondary: 'bg-slate-100 text-slate-700 hover:bg-slate-200',
-// //     outline: 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50',
-// //   };
-// //   return (
-// //     <button
-// //       onClick={onClick}
-// //       disabled={disabled}
-// //       className={cn(baseStyles, variants[variant], disabled && 'opacity-50 cursor-not-allowed', className)}
-// //     >
-// //       {children}
-// //     </button>
-// //   );
-// // };
-
-// // // Custom component to simulate the Card component
-// // const Card = ({ children, className }) => {
-// //   return (
-// //     <div
-// //       className={cn(
-// //         'bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden',
-// //         className
-// //       )}
-// //     >
-// //       {children}
-// //     </div>
-// //   );
-// // };
-
-// // // Custom component to simulate the Badge component
-// // const Badge = ({ children, className }) => {
-// //   return (
-// //     <span
-// //       className={cn('px-3 py-1 text-xs font-semibold rounded-full', className)}
-// //     >
-// //       {children}
-// //     </span>
-// //   );
-// // };
-
-// // // Custom component for Loading.tsx
-// // const Loading = ({ text }) => (
-// //   <div className="flex items-center justify-center p-8 bg-white rounded-2xl shadow-md">
-// //     <Loader size={32} className="animate-spin text-teal-600 mr-4" />
-// //     <span className="text-xl font-semibold text-slate-700">{text}</span>
-// //   </div>
-// // );
-
-// // // Custom component for Alert.tsx
-// // const Alert = ({ title, message, type = 'info', onClose }) => {
-// //   const bgColor = type === 'error' ? 'bg-red-500' : 'bg-green-500';
-// //   const icon = type === 'error' ? <AlertTriangle size={24} /> : <CheckCircle2 size={24} />;
-
-// //   return (
-// //     <div className={cn(
-// //       "fixed inset-x-4 top-4 z-50 p-4 rounded-xl shadow-lg text-white flex items-center justify-between",
-// //       bgColor
-// //     )}>
-// //       <div className="flex items-center">
-// //         {icon}
-// //         <div className="ml-4">
-// //           <h4 className="font-bold">{title}</h4>
-// //           <p className="text-sm">{message}</p>
-// //         </div>
-// //       </div>
-// //       <button onClick={onClose} className="p-1 rounded-full hover:bg-white/20 transition-colors">
-// //         <X size={20} />
-// //       </button>
-// //     </div>
-// //   );
-// // };
-
-// // // Custom component for Toast.tsx
-// // const Toast = ({ message, type = 'success', onClose }) => {
-// //   const bgColor = type === 'error' ? 'bg-red-500' : 'bg-teal-600';
-// //   const icon = type === 'error' ? <AlertTriangle size={20} /> : <CheckCircle2 size={20} />;
-
-// //   useEffect(() => {
-// //     const timer = setTimeout(() => {
-// //       onClose();
-// //     }, 3000);
-// //     return () => clearTimeout(timer);
-// //   }, [onClose]);
-
-// //   return (
-// //     <div className={cn(
-// //       "fixed bottom-4 right-4 z-50 px-6 py-3 rounded-full shadow-lg text-white flex items-center",
-// //       bgColor
-// //     )}>
-// //       {icon}
-// //       <span className="ml-2 font-semibold">{message}</span>
-// //     </div>
-// //   );
-// // };
-
-// // // Custom component for Pagination.tsx
-// // const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-// //   const pageNumbers = [];
-// //   for (let i = 1; i <= totalPages; i++) {
-// //     pageNumbers.push(i);
-// //   }
-
-// //   return (
-// //     <div className="flex justify-center items-center space-x-2 mt-8">
-// //       <Button
-// //         onClick={() => onPageChange(currentPage - 1)}
-// //         disabled={currentPage === 1}
-// //         variant="secondary"
-// //       >
-// //         <ChevronLeft size={16} />
-// //       </Button>
-// //       {pageNumbers.map((number) => (
-// //         <Button
-// //           key={number}
-// //           onClick={() => onPageChange(number)}
-// //           className={`${currentPage === number ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
-// //         >
-// //           {number}
-// //         </Button>
-// //       ))}
-// //       <Button
-// //         onClick={() => onPageChange(currentPage + 1)}
-// //         disabled={currentPage === totalPages}
-// //         variant="secondary"
-// //       >
-// //         <ChevronRight size={16} />
-// //       </Button>
-// //     </div>
-// //   );
-// // };
-
-// // // Custom component for the car list view
-// // const CarList = ({ onSelectCar, cars, onPageChange, currentPage, totalPages }) => (
-// //   <div className="p-4 sm:p-8 md:p-12">
-// //     <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-slate-800">Used Convertible Cars For Sale</h1>
-// //     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-// //       {cars.map((car) => (
-// //         <Card key={car._id} className="cursor-pointer" onClick={() => onSelectCar(car)}>
-// //           <img src={car.imageUrl} alt={car.title} className="w-full h-48 object-cover" />
-// //           <div className="p-4">
-// //             <h2 className="text-xl font-bold text-slate-900">{car.title}</h2>
-// //             <p className="text-lg font-semibold text-teal-600 mt-2">${car.price}</p>
-// //             <div className="flex items-center text-slate-500 text-sm mt-1">
-// //               <MapPin size={14} className="mr-1" /> {car.location}
-// //             </div>
-// //             <div className="flex flex-wrap gap-2 mt-4">
-// //               <Badge className="bg-slate-100 text-slate-700">
-// //                 <Gauge size={12} className="inline mr-1" /> {car.mileage} km
-// //               </Badge>
-// //               <Badge className="bg-slate-100 text-slate-700">
-// //                 <Calendar size={12} className="inline mr-1" /> {car.year}
-// //               </Badge>
-// //               <Badge className="bg-slate-100 text-slate-700">
-// //                 <CarIcon size={12} className="inline mr-1" /> {car.type}
-// //               </Badge>
-// //             </div>
-// //             <div className="mt-4">
-// //               <Button className="w-full" variant="primary">View Details</Button>
-// //             </div>
-// //           </div>
-// //         </Card>
-// //       ))}
-// //     </div>
-// //     <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
-// //   </div>
-// // );
-
-// // // New DealerCard component based on the reference site
-// // const DealerCard = ({ dealer }) => (
-// //   <Card className="p-6">
-// //     <h3 className="text-lg font-bold text-slate-900">Dealer Information</h3>
-// //     <div className="flex items-center mt-4">
-// //       <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-4 text-teal-600">
-// //         <Star size={24} />
-// //       </div>
-// //       <div>
-// //         <p className="font-semibold text-slate-800">{dealer.dealerName}</p>
-// //         <p className="text-sm text-slate-500">Since 2010</p>
-// //       </div>
-// //     </div>
-// //     <div className="mt-6 space-y-3 text-slate-600">
-// //       <div className="flex items-center">
-// //         <LocateFixed size={16} className="text-slate-400 mr-3" />
-// //         <p>{dealer.dealerAddress}</p>
-// //       </div>
-// //       <div className="flex items-center">
-// //         <Phone size={16} className="text-slate-400 mr-3" />
-// //         <p>{dealer.dealerPhone}</p>
-// //       </div>
-// //       <div className="flex items-center">
-// //         <Clock size={16} className="text-slate-400 mr-3" />
-// //         <p>{dealer.dealerHours}</p>
-// //       </div>
-// //     </div>
-// //     <Button variant="outline" className="mt-6 w-full">
-// //       <ExternalLink size={16} className="mr-2" />
-// //       Visit Website
-// //     </Button>
-// //   </Card>
-// // );
-
-// // // Updated CarDetails component to match the reference site
-// // const CarDetails = ({ car, onBack }) => {
-// //   const [showToast, setShowToast] = useState(false);
-// //   const [showMore, setShowMore] = useState(false);
-
-// //   const handleContactDealer = () => {
-// //     // Simulate contact form submission or action
-// //     setShowToast(true);
-// //   };
-
-// //   return (
-// //     <div className="p-4 sm:p-8 md:p-12">
-// //       <Button onClick={onBack} variant="secondary" className="mb-6 flex items-center">
-// //         <ChevronLeft size={20} className="mr-2" />
-// //         Back to Listings
-// //       </Button>
-
-// //       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-// //         {/* Left Column: Image and Details */}
-// //         <div className="lg:col-span-2 space-y-8">
-// //           <Card className="p-0">
-// //             <img src={car.imageUrl} alt={car.title} className="w-full rounded-2xl object-cover h-96 sm:h-[600px]" />
-// //           </Card>
-
-// //           <Card className="p-8">
-// //             <div className="flex justify-between items-start mb-4">
-// //               <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">{car.title}</h1>
-// //               <p className="text-4xl font-extrabold text-teal-600">${car.price}</p>
-// //             </div>
-
-// //             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-6 mt-6 border-t pt-6">
-// //               <div className="flex flex-col">
-// //                 <p className="text-sm font-semibold text-slate-500">Mileage</p>
-// //                 <div className="flex items-center mt-1 text-slate-700">
-// //                   <Gauge size={20} className="mr-2 text-teal-600" />
-// //                   <p className="font-medium">{car.mileage} km</p>
-// //                 </div>
-// //               </div>
-// //               <div className="flex flex-col">
-// //                 <p className="text-sm font-semibold text-slate-500">Year</p>
-// //                 <div className="flex items-center mt-1 text-slate-700">
-// //                   <Calendar size={20} className="mr-2 text-teal-600" />
-// //                   <p className="font-medium">{car.year}</p>
-// //                 </div>
-// //               </div>
-// //               <div className="flex flex-col">
-// //                 <p className="text-sm font-semibold text-slate-500">Fuel Type</p>
-// //                 <div className="flex items-center mt-1 text-slate-700">
-// //                   <Fuel size={20} className="mr-2 text-teal-600" />
-// //                   <p className="font-medium">{car.fuel}</p>
-// //                 </div>
-// //               </div>
-// //               <div className="flex flex-col">
-// //                 <p className="text-sm font-semibold text-slate-500">Drivetrain</p>
-// //                 <div className="flex items-center mt-1 text-slate-700">
-// //                   <Car size={20} className="mr-2 text-teal-600" />
-// //                   <p className="font-medium">{car.drivetrain}</p>
-// //                 </div>
-// //               </div>
-// //               <div className="flex flex-col">
-// //                 <p className="text-sm font-semibold text-slate-500">Transmission</p>
-// //                 <div className="flex items-center mt-1 text-slate-700">
-// //                   <Zap size={20} className="mr-2 text-teal-600" />
-// //                   <p className="font-medium">{car.transmission}</p>
-// //                 </div>
-// //               </div>
-// //               <div className="flex flex-col">
-// //                 <p className="text-sm font-semibold text-slate-500">Engine</p>
-// //                 <div className="flex items-center mt-1 text-slate-700">
-// //                   <Euro size={20} className="mr-2 text-teal-600" />
-// //                   <p className="font-medium">{car.engine}</p>
-// //                 </div>
-// //               </div>
-// //             </div>
-// //           </Card>
-
-// //           <Card className="p-8">
-// //             <h3 className="text-2xl font-bold text-slate-900 mb-4">Vehicle Description</h3>
-// //             <div className={cn('text-slate-600 leading-relaxed', !showMore && 'line-clamp-3')}>
-// //               <p>{car.description}</p>
-// //             </div>
-// //             <button
-// //               onClick={() => setShowMore(!showMore)}
-// //               className="mt-4 flex items-center font-semibold text-teal-600 hover:text-teal-700"
-// //             >
-// //               {showMore ? 'Show less' : 'Show more'}
-// //               <ChevronDown size={16} className={cn('ml-1 transition-transform', showMore && 'rotate-180')} />
-// //             </button>
-// //           </Card>
-
-// //           <Card className="p-8">
-// //             <h3 className="text-2xl font-bold text-slate-900 mb-4">Key Features</h3>
-// //             <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4 text-slate-700">
-// //               {car.features.map((feature, index) => (
-// //                 <li key={index} className="flex items-center">
-// //                   <CheckCircle2 size={16} className="mr-2 text-teal-600" />
-// //                   {feature}
-// //                 </li>
-// //               ))}
-// //             </ul>
-// //           </Card>
-// //         </div>
-
-// //         {/* Right Column: Dealer Info and Contact */}
-// //         <div className="lg:col-span-1 space-y-6">
-// //           <DealerCard dealer={car} />
-// //           <Card className="p-6">
-// //             <h3 className="text-lg font-bold text-slate-900 mb-4">Contact Dealer</h3>
-// //             <p className="text-sm text-slate-600 mb-4">Enter your details and a representative will contact you shortly.</p>
-// //             <div className="space-y-4">
-// //               <input type="text" placeholder="Your Name" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500" />
-// //               <input type="email" placeholder="Your Email" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500" />
-// //               <textarea placeholder="Your Message" rows={4} className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
-// //               <Button onClick={handleContactDealer} className="w-full">
-// //                 <Mail size={20} className="mr-2" />
-// //                 Contact Dealer
-// //               </Button>
-// //             </div>
-// //           </Card>
-// //         </div>
-// //       </div>
-// //       {showToast && <Toast message="Message sent to dealer successfully!" onClose={() => setShowToast(false)} />}
-// //     </div>
-// //   );
-// // };
-
-// // // Main App component
-// // export default function App() {
-// //   const [selectedCar, setSelectedCar] = useState(null);
-// //   const [isLoading, setIsLoading] = useState(false);
-// //   const [showAlert, setShowAlert] = useState(true);
-// //   const [currentPage, setCurrentPage] = useState(1);
-// //   const carsPerPage = 3;
-// //   const totalPages = Math.ceil(mockCars.length / carsPerPage);
-
-// //   const handleSelectCar = (car) => {
-// //     setIsLoading(true);
-// //     setTimeout(() => {
-// //       setSelectedCar(car);
-// //       setIsLoading(false);
-// //       window.scrollTo({ top: 0, behavior: 'smooth' });
-// //     }, 500); // Simulate a network delay
-// //   };
-
-// //   const handleBackToList = () => {
-// //     setSelectedCar(null);
-// //   };
-
-// //   const handlePageChange = (page) => {
-// //     setIsLoading(true);
-// //     setTimeout(() => {
-// //       setCurrentPage(page);
-// //       setIsLoading(false);
-// //     }, 300);
-// //   };
-
-// //   const paginatedCars = mockCars.slice(
-// //     (currentPage - 1) * carsPerPage,
-// //     currentPage * carsPerPage
-// //   );
-
-// //   return (
-// //     <div className="bg-slate-50 min-h-screen font-sans antialiased text-slate-800">
-// //       <script src="https://cdn.tailwindcss.com"></script>
-// //       <div className="container mx-auto">
-// //         {showAlert && <Alert
-// //           title="Important Notice"
-// //           message="Due to high demand, some vehicles may sell quickly. Contact us to confirm availability!"
-// //           onClose={() => setShowAlert(false)}
-// //           type="error"
-// //         />}
-
-// //         {isLoading ? (
-// //           <div className="p-8"><Loading text="Loading car data..." /></div>
-// //         ) : selectedCar ? (
-// //           <CarDetails car={selectedCar} onBack={handleBackToList} />
-// //         ) : (
-// //           <CarList
-// //             onSelectCar={handleSelectCar}
-// //             cars={paginatedCars}
-// //             onPageChange={handlePageChange}
-// //             currentPage={currentPage}
-// //             totalPages={totalPages}
-// //           />
-// //         )}
-// //       </div>
-// //     </div>
-// //   );
-// // }
 'use client';
 
-import React, { useState, useEffect, ReactNode, MouseEventHandler, SelectHTMLAttributes, FC } from 'react';
+import React, { useState, useEffect, ReactNode, MouseEventHandler, SelectHTMLAttributes, FC, useMemo } from 'react';
 import {
     Search,
     SlidersHorizontal,
-    LayoutGrid,
     List,
     ChevronDown,
-    X,
-    Gauge,
-    Fuel,
-    Car,
     ChevronLeft,
     ChevronRight,
-    Heart,
-    Share2,
-    Euro,
-    Tag,
-    MapPin,
-    AlertTriangle,
-    CheckCircle2,
     Circle,
     LucideLayoutGrid,
-    Calendar,
-    DollarSign,
-    Droplets,
-    Zap,
-    Leaf,
-    Users,
-    DoorOpen,
-    Settings,
-    Star,
-    Check,
 } from 'lucide-react';
 import { cn } from '@app/lib/utils';
 import { useRouter } from 'next/navigation';
-import { mockCars } from '@app/data/cars';
-import { CarCardProps, ICar } from '@app/types/car';
 import { CarList } from '@app/components/car/CarList';
 import { CarGrid } from '@app/components/car/CarGrid';
 import { CarDetails } from '@app/components/car/CarDetails';
 import { Card } from '@app/components/ui';
 import { CarFilters } from '@app/components/car/CarFilters';
 import { CarCheckboxFilterGroup } from '@app/components/car/CarCheckboxFilterGroup';
-
-// --- Mock Data & Components ---
-
-// Mock data for car listings
-
-// Reusable UI components
-
-
+import { AppDispatch, RootState } from '@app/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCars, createCar, updateCar, deleteCar } from '@app/store/slices/carSlice';
+import { ICar } from '@app/database/models/Car';
 
 interface ButtonProps {
     children: ReactNode;
@@ -646,8 +83,8 @@ const Select = ({ children, className = '', ...props }: SelectProps) => {
 
 
 
-const getAvailableYears = () => {
-    const years = mockCars
+const getAvailableYears = (cars:ICar[]) => {
+    const years = cars
         .map(car => car.year ?? null)
         .filter((y): y is number => y !== null);
 
@@ -655,11 +92,6 @@ const getAvailableYears = () => {
     return uniqueYears;
 };
 
-const availableYears = getAvailableYears();
-
-
-
-// Car Card for Grid View
 
 
 
@@ -706,6 +138,8 @@ interface ActiveFilters {
 
 // Main App component
 export default function App() {
+    const dispatch = useDispatch<AppDispatch>();
+    const { cars, loading, error } = useSelector((state: RootState) => state.cars);
     type FilterKey =
         | 'location' | 'condition' | 'makeModel' | 'year' | 'price'
         | 'bodyType' | 'exteriorColor' | 'interiorColor' | 'mileage'
@@ -731,6 +165,7 @@ export default function App() {
     const [currentPage, setCurrentPage] = useState(1);
     const [view, setView] = useState('grid'); // 'grid' or 'list'
     const [selectedCar, setSelectedCar] = useState(null);
+    const [availableYears, setAvailableYears] = useState<number[]>([]);
     const router = useRouter();
     const toggleCarFilters = (filter: FilterKey) => {
         setFilterStates(prev => ({ ...prev, [filter]: !prev[filter] }));
@@ -772,7 +207,7 @@ export default function App() {
     };
 
     // Filter cars based on active filters
-    const filteredCars = mockCars.filter(car => {
+    const filteredCars = cars.filter(car => {
         if (car.type === 'promo') return true; // Always show promo card
 
         // Condition filter
@@ -879,7 +314,24 @@ export default function App() {
     useEffect(() => {
         setCurrentPage(1);
     }, [activeFilters, sortOrder, displayCount]);
+    
+    // Option 2: Even more efficient - using useMemo for serialization
+const serializedActiveFilters = useMemo(() => JSON.stringify(activeFilters), [activeFilters]);
+const serializedFilterStates = useMemo(() => JSON.stringify(filterStates), [filterStates]);
 
+useEffect(() => {
+    const filters = activeFilters; // Use activeFilters directly
+
+    dispatch(fetchCars({ filters, limit: displayCount, page: currentPage })).then(() => {
+        setAvailableYears(getAvailableYears(cars));
+    });
+}, [
+    dispatch, 
+    displayCount, 
+    currentPage,
+    serializedActiveFilters,
+    serializedFilterStates,
+]);
     // Main render logic
     if (selectedCar) {
         return <CarDetails car={selectedCar} onBackClick={() => setSelectedCar(null)} />;
@@ -887,7 +339,7 @@ export default function App() {
 
     return (
         <div className="min-h-screen bg-slate-50 antialiased font-sans text-slate-800">
-            <script src="https://cdn.tailwindcss.com"></script>
+            {/* <script src="https://cdn.tailwindcss.com"></script> */}
             <div className="flex flex-col md:flex-row min-h-screen">
                 {/* Left Sidebar - Filters */}
                 <div className="w-full md:w-80 bg-white border-r border-gray-200 flex-shrink-0">

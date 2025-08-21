@@ -3,8 +3,7 @@ import { Car, Fuel, Gauge, MapPin, Heart } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 
-import { CarCardProps, ICar } from '@app/types/car';
-
+import { CarCardProps } from '@app/types/car';
 // Car Card for List View
 const CarList: FC<CarCardProps> = ({ car, onClick }) => (
     <Card

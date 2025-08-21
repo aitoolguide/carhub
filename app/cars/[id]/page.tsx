@@ -1,64 +1,3 @@
-// import React from 'react';
-// import Link from 'next/link';
-
-// // Mock data for car details (a more detailed version)
-// const mockCarsData = {
-//   '1': { id: '1', title: '2023 Mercedes-Benz C-Class', price: '64,980', description: 'A luxurious sedan with advanced features and a powerful engine.', imageUrl: 'https://placehold.co/800x600/22d3ee/ffffff?text=Mercedes' },
-//   '2': { id: '2', title: '2022 BMW 4 Series Convertible', price: '58,500', description: 'A sporty convertible perfect for weekend drives.', imageUrl: 'https://placehold.co/800x600/60a5fa/ffffff?text=BMW' },
-//   '3': { id: '3', title: '2021 Audi A5 Convertible', price: '52,000', description: 'Elegant design and a comfortable ride with a convertible top.', imageUrl: 'https://placehold.co/800x600/a3e635/ffffff?text=Audi' },
-//   '4': { id: '4', title: '2020 Ford Mustang GT', price: '45,000', description: 'An iconic muscle car with a powerful V8 engine.', imageUrl: 'https://placehold.co/800x600/fbbf24/ffffff?text=Mustang' },
-// };
-
-// /**
-//  * The individual car details page component.
-//  * It fetches and displays detailed information about a single car based on its ID.
-//  */
-// const CarDetailsPage = ({ params }: { params: { id: string } }) => {
-//   const car = mockCarsData[params.id as keyof typeof mockCarsData];
-
-//   if (!car) {
-//     return (
-//       <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
-//         <h1 className="text-3xl font-bold text-red-500">Car Not Found</h1>
-//         <p className="mt-2 text-gray-600">The requested car ID does not exist.</p>
-//         <Link href="/cars">
-//           <button className="mt-4 px-6 py-3 rounded-md text-white bg-teal-500 hover:bg-teal-600 transition-colors">
-//             Back to Listings
-//           </button>
-//         </Link>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-//       <Link href="/cars">
-//         <button className="mb-6 px-4 py-2 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors">
-//           &larr; Back to Listings
-//         </button>
-//       </Link>
-//       <div className="bg-white rounded-xl shadow-lg p-8">
-//         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-//           <div>
-//             <img src={car.imageUrl} alt={car.title} className="w-full h-auto rounded-xl" />
-//           </div>
-//           <div>
-//             <h1 className="text-4xl font-bold text-gray-900">{car.title}</h1>
-//             <p className="text-3xl font-extrabold text-teal-600 mt-2">${car.price}</p>
-//             <p className="mt-6 text-lg text-gray-700 leading-relaxed">
-//               {car.description}
-//             </p>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CarDetailsPage;
-
-
-
 
 'use client';
 
@@ -89,8 +28,10 @@ import {
 import { cn } from '@app/lib/utils';
 import { mockCars } from '@app/data/cars';
 import Link from '@node_modules/next/link';
-
 import { ReactNode, MouseEventHandler } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCars, fetchCarById, createCar, updateCar, deleteCar } from '@app/store/slices/carSlice';
+import { AppDispatch,RootState } from '@app/store';
 
 interface ButtonProps {
   children: ReactNode;
@@ -430,25 +371,32 @@ const CarDetails = ({ car }: { car: any }) => {
 
 // Main App component
 export default function App({ params }: { params: Promise<{ id: string }> }) {
+    const dispatch = useDispatch<AppDispatch>();
+    const { car, loading, error } = useSelector((state: RootState) => state.cars);
     const [showAlert, setShowAlert] = useState(false);
     const unwrappedParams = React.use(params); // Unwrap the params promise
-    const car = mockCars.find(car => car._id === unwrappedParams.id);
-    if (!car) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
-                <h1 className="text-3xl font-bold text-red-500">Car Not Found</h1>
-                <p className="mt-2 text-gray-600">The requested car ID does not exist.</p>
-                <Link href="/cars">
-                    <button className="mt-4 px-6 py-3 rounded-md text-white bg-teal-500 hover:bg-teal-600 transition-colors">
-                        Back to Listings
-                    </button>
-                </Link>
-            </div>
-        );
-    }
+    // const car = mockCars.find(car => car._id === unwrappedParams.id);
+     useEffect(() => {
+        if (unwrappedParams.id) {
+            dispatch(fetchCarById(unwrappedParams.id));
+        }
+    }, [dispatch, unwrappedParams.id]);
+    // if (!car) {
+    //     return (
+    //         <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
+    //             <h1 className="text-3xl font-bold text-red-500">Car Not Found</h1>
+    //             <p className="mt-2 text-gray-600">The requested car ID does not exist.</p>
+    //             <Link href="/cars">
+    //                 <button className="mt-4 px-6 py-3 rounded-md text-white bg-teal-500 hover:bg-teal-600 transition-colors">
+    //                     Back to Listings
+    //                 </button>
+    //             </Link>
+    //         </div>
+    //     );
+    // }
     return (
         <> 
-        {car && <div className="bg-slate-50 min-h-screen font-sans antialiased text-slate-800">
+        {<div className="bg-slate-50 min-h-screen font-sans antialiased text-slate-800">
             <script src="https://cdn.tailwindcss.com"></script>
             <div className="container mx-auto">
                 {showAlert && <Alert

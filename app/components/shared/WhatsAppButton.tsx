@@ -39,9 +39,9 @@ import React from 'react';
 
 interface WhatsAppLinkProps {
   car: {
-    whatsappNumber: string;
+    whatsappNumber?: string;
     title: string;
-    id: string;
+    id?: string;
   };
 }
 

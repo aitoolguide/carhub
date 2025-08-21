@@ -1,38 +1,18 @@
-import mongoose, { Connection } from 'mongoose';
+import mongoose from 'mongoose';
 
-const MONGODB_URI: string = process.env.MONGODB_URI || '';
+let isConnected = false; // track the connection
 
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-}
-
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-async function dbConnect(): Promise<Connection | null> {
-  if (cached.conn) {
-    return cached.conn;
-  }
-
-  if (!cached.promise) {
-    const opts = { bufferCommands: false };
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then(() => {
-      return mongoose.connection; // ✅ Return the actual connection
-    });
+export const dbConnect = async () => {
+  // mongoose.set('bufferCommands', true);
+const MONGODB_URI = process.env.MONGODB_URI||'';
+  if (isConnected) {
+    return;
   }
 
   try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    throw e;
+    await mongoose.connect(`mongodb+srv://aitoolguide:dewpAPkO92sx2dcR@cluster0.k65aqze.mongodb.net/`,{dbName: 'carhub'});
+    isConnected = true;
+  } catch (error) {
+    console.log(error);
   }
-
-  return cached.conn;
 }
-
-export default dbConnect;

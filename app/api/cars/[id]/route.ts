@@ -1,6 +1,7 @@
+import { Car } from '@app/database/models/Car';
+import { dbConnect } from '@app/lib/mongodb';
 import { NextResponse } from 'next/server';
-import dbConnect from '@app/lib/mongodb';
-import Car from '@app/database/models/Car';
+
 
 interface RouteContext {
   params: Promise<{ id: string }>;

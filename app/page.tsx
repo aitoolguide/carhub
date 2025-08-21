@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { 
@@ -25,141 +25,23 @@ import {
   Heart,
   Share2
 } from 'lucide-react';
-
+import { ICar } from '@app/database/models/Car';
 import { randomFillSync } from "crypto";
 import { WhatsAppLink } from './components/shared/WhatsAppButton';
+import { carCategories, featuredCars, testimonials } from './data/cars';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@app//store'; // Adjust path to your store
+import { fetchCars } from '@app/store/slices/carSlice'; // Adjust path to your car slice
 
-
-// Mock data - In real app, this would come from your API
-const featuredCars = [
-  {
-    id: 1,
-    title: "2024 Mercedes-Benz C-Class",
-    year: 2024,
-    make: "Mercedes-Benz",
-    model: "C-Class",
-    price: 45888,
-    originalPrice: 48888,
-    mileage: 12500,
-    location: "Karachi, Sindh",
-    dealerName: "Premium Motors",
-    dealerPhone: "+92-321-1234567",
-    drivetrain: "All-Wheel Drive",
-    condition: "Used",
-    bodyType: "Sedan",
-    fuelType: "Petrol",
-    transmission: "Automatic",
-    images: [
-      "/images/cars/mercedes-c-class-1.jpg",
-      "/images/cars/mercedes-c-class-2.jpg"
-    ],
-    features: ["Leather Seats", "Sunroof", "Navigation", "Backup Camera"],
-    rating: 4.8,
-    reviews: 24,
-    isSponsored: true,
-    isFeatured: true,
-    whatsappNumber: "+923211234567"
-  },
-  {
-    id: 2,
-    title: "2023 Toyota Camry Hybrid",
-    year: 2023,
-    make: "Toyota",
-    model: "Camry",
-    price: 32888,
-    mileage: 25000,
-    location: "Lahore, Punjab",
-    dealerName: "City Auto",
-    dealerPhone: "+92-321-9876543",
-    drivetrain: "Front-Wheel Drive",
-    condition: "Used",
-    bodyType: "Sedan",
-    fuelType: "Hybrid",
-    transmission: "CVT",
-    images: [
-      "/images/cars/toyota-camry-1.jpg",
-      "/images/cars/toyota-camry-2.jpg"
-    ],
-    features: ["Hybrid Engine", "Lane Assist", "Adaptive Cruise", "Wireless Charging"],
-    rating: 4.6,
-    reviews: 18,
-    isSponsored: false,
-    isFeatured: true,
-    whatsappNumber: "+923219876543"
-  },
-  {
-    id: 3,
-    title: "2022 BMW X5 M Sport",
-    year: 2022,
-    make: "BMW",
-    model: "X5",
-    price: 78888,
-    mileage: 18000,
-    location: "Islamabad, Capital",
-    dealerName: "Luxury Cars Hub",
-    dealerPhone: "+92-321-5555666",
-    drivetrain: "All-Wheel Drive",
-    condition: "Used",
-    bodyType: "SUV",
-    fuelType: "Petrol",
-    transmission: "Automatic",
-    images: [
-      "/images/cars/bmw-x5-1.jpg",
-      "/images/cars/bmw-x5-2.jpg"
-    ],
-    features: ["M Sport Package", "Panoramic Roof", "Premium Audio", "Heads-Up Display"],
-    rating: 4.9,
-    reviews: 31,
-    isSponsored: true,
-    isFeatured: true,
-    whatsappNumber: "+923215555666"
-  }
-];
-
-const carCategories = [
-  { name: "Sedan", count: 1250, icon: Car, image: "/images/categories/sedan.jpg" },
-  { name: "SUV", count: 980, icon: Car, image: "/images/categories/suv.jpg" },
-  { name: "Hatchback", count: 756, icon: Car, image: "/images/categories/hatchback.jpg" },
-  { name: "Convertible", count: 234, icon: Car, image: "/images/categories/convertible.jpg" },
-  { name: "Truck", count: 445, icon: Car, image: "/images/categories/truck.jpg" },
-  { name: "Electric", count: 189, icon: Car, image: "/images/categories/electric.jpg" }
-];
-
-const testimonials = [
-  {
-    id: 1,
-    name: "Ahmad Hassan",
-    location: "Karachi",
-    rating: 5,
-    text: "Found my dream car within days! The platform is user-friendly and the dealers are responsive.",
-    image: "/images/testimonials/user1.jpg"
-  },
-  {
-    id: 2,
-    name: "Fatima Sheikh",
-    location: "Lahore",
-    rating: 5,
-    text: "Excellent service and genuine listings. WhatsApp integration made communication so easy!",
-    image: "/images/testimonials/user2.jpg"
-  },
-  {
-    id: 3,
-    name: "Ali Khan",
-    location: "Islamabad",
-    rating: 4,
-    text: "Great variety of cars and competitive prices. Highly recommend for car buyers in Pakistan.",
-    image: "/images/testimonials/user3.jpg"
-  }
-];
 
 // Car Card Component
-const CarCard = ({ car }: { car: typeof featuredCars[0] }) => {
+const CarCard = ({ car }: { car: ICar }) => {
   return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100">
       {/* Image Section */}
       <div className="relative h-56 overflow-hidden">
         <Image
-          src={car.images[0] || "/images/placeholder-car.jpg"}
+          src={car?.images?.[0] || "/images/placeholder-car.jpg"}
           alt={car.title}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -209,7 +91,7 @@ const CarCard = ({ car }: { car: typeof featuredCars[0] }) => {
       {/* Content Section */}
       <div className="p-6">
         <div className="mb-4">
-          <Link href={`/cars/${car.id}`} className="hover:text-blue-600 transition-colors">
+          <Link href={`/cars/${car._id}`} className="hover:text-blue-600 transition-colors">
             <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
               {car.title}
             </h3>
@@ -219,7 +101,7 @@ const CarCard = ({ car }: { car: typeof featuredCars[0] }) => {
           <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 mb-4">
             <div className="flex items-center gap-2">
               <Gauge className="w-4 h-4 text-blue-500" />
-              <span>{car.mileage.toLocaleString()} km</span>
+              <span>{car.mileage?.toLocaleString()} km</span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-green-500" />
@@ -257,7 +139,7 @@ const CarCard = ({ car }: { car: typeof featuredCars[0] }) => {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <Link 
-            href={`/cars/${car.id}`}
+            href={`/cars/${car._id}`}
             className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 px-4 rounded-xl font-semibold text-center transition-all duration-300 transform hover:scale-[1.02]"
           >
             View Details
@@ -272,7 +154,7 @@ const CarCard = ({ car }: { car: typeof featuredCars[0] }) => {
           >
             <MessageCircle className="w-5 h-5" />
           </Link> */}
-          <WhatsAppLink car={{whatsappNumber:car.whatsappNumber,title:car.title,id: car.id?.toString()}}></WhatsAppLink>
+          <WhatsAppLink car={{whatsappNumber:car.whatsappNumber,title:car.title,id: car._id?.toString()}}></WhatsAppLink>
           <Link
             href={`tel:${car.dealerPhone}`}
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-3 rounded-xl transition-colors duration-300"
@@ -444,6 +326,64 @@ const CategoriesSection = () => {
 
 // Featured Cars Section
 const FeaturedCarsSection = () => {
+   const dispatch = useDispatch<AppDispatch>();
+  const { cars, loading, error } = useSelector((state: RootState) => state.cars);
+  
+  // Filter for featured cars from the loaded cars
+const featuredCars = useMemo(() => {
+    return cars.filter((car) => car.isFeatured === true).slice(0, 6); // Limit to 6 featured cars
+  }, [cars]);
+
+  // Fetch featured cars on component mount
+  useEffect(() => {
+    const featuredFilters = {
+      isFeatured: true,
+      // Add any other filters you need
+    };
+
+    dispatch(fetchCars({ 
+      filters: {isFeatured:true}, 
+      limit: 6, // Limit featured cars
+      page: 1 
+    }));
+  }, [dispatch]);
+
+  if (loading && featuredCars.length === 0) {
+    return (
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-16">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Featured Cars
+              </h2>
+              <p className="text-xl text-gray-600">
+                Hand-picked premium vehicles from trusted dealers
+              </p>
+            </div>
+          </div>
+          
+          {/* Loading Skeleton */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="bg-gray-200 rounded-2xl h-96 animate-pulse"></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Featured Cars</h2>
+          <p className="text-red-600">Error loading featured cars: {error}</p>
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -467,8 +407,8 @@ const FeaturedCarsSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredCars.map((car) => (
-            <CarCard key={car.id} car={car} />
+          {cars.map((car) => (
+            <CarCard key={car._id} car={car} />
           ))}
         </div>
 
@@ -636,6 +576,8 @@ const CTASection = () => {
 
 // Main HomePage Component
 export default function HomePage() {
+
+
   return (
     <main className="min-h-screen">
       <SearchHero />
@@ -945,14 +887,3 @@ export default function HomePage() {
     </main>
   );
 }
-
-// export default function HomePage() {
-//   return (
-//     <main className="min-h-screen bg-gray-100">
-//       <div className="max-w-7xl mx-auto px-4 py-16">
-//         <h1 className="text-3xl font-bold text-gray-900 mb-4">Welcome to CarHub</h1>
-//         <p className="text-lg text-gray-700">Your one-stop solution for buying and selling cars in Pakistan.</p>
-//       </div>
-//     </main>
-//   );
-// }

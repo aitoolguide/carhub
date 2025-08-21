@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Edit, Trash2 } from 'lucide-react';
 import { Button } from '@app/components/ui';
-import { ICar } from '@app/types/car';
+import { ICar } from '@app/database/models/Car';
 
 
 interface CarTableProps {
