@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react';
 import { Sidebar } from './Sidebar';
-import { Header } from './Header';
+
 import { Footer } from './Footer';
 import { MobileMenu } from './MobileMenu';
 import { Home, User, BarChart2, Settings } from 'lucide-react';
+import Header from './Header';
 
 interface AdminLayoutProps {
   children: ReactNode;

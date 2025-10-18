@@ -11,6 +11,8 @@ export interface IUser extends Document {
   role: 'user' | 'admin';
   createdAt: Date;
   updatedAt: Date;
+  roleId?: string;
+  profile?: any;
 }
 
 // Define the Mongoose schema for the User

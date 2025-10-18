@@ -1,5 +1,6 @@
 // src/database/models/Car.ts
 import mongoose, { Document, Schema, Model } from 'mongoose';
+import User from './User';
 
 // Base interface for Car fields (no Mongoose Document here)
 export interface ICar {
@@ -44,6 +45,8 @@ export interface ICar {
   category?: string;
   specifications?: { [key: string]: string } | Map<string, string>;
   description?: string;
+  postedBy?: string;
+  status?: string;
   isNewCar?: boolean; // Alias for isNew
 }
 
@@ -52,98 +55,98 @@ export type ICarDocument = ICar & Document;
 
 const CarSchema = new Schema<ICarDocument>(
   {
-    make: { 
-      type: String, 
+    make: {
+      type: String,
       required: true,
       trim: true,
       index: true // Add index for filtering
     },
-    carModel: { 
-      type: String, 
-      required: true, 
+    carModel: {
+      type: String,
+      required: true,
       alias: 'model',
       trim: true
     },
-    year: { 
-      type: Number, 
+    year: {
+      type: Number,
       required: true,
       min: [1900, 'Year must be after 1900'],
       max: [new Date().getFullYear() + 2, 'Year cannot be more than 2 years in the future'],
       index: true
     },
-    price: { 
-      type: Number, 
+    price: {
+      type: Number,
       required: true,
       min: [0, 'Price cannot be negative'],
       index: true // Add index for price filtering
     },
-    image: { 
-      type: String, 
+    image: {
+      type: String,
       required: true,
       trim: true
     },
-    isFeatured: { 
-      type: Boolean, 
+    isFeatured: {
+      type: Boolean,
       default: false,
       index: true // Add index for featured cars
     },
-    isSold: { 
-      type: Boolean, 
+    isSold: {
+      type: Boolean,
       default: false,
       index: true // Add index for sold status
     },
-    imageUrl: { 
+    imageUrl: {
       type: String,
       trim: true
     },
-    thumbnailUrls: { 
+    thumbnailUrls: {
       type: [String],
       default: []
     },
-    imageAlt: { 
+    imageAlt: {
       type: String,
       trim: true
     },
-    dealerName: { 
+    dealerName: {
       type: String,
       trim: true
     },
-    dealerPhone: { 
+    dealerPhone: {
       type: String,
       trim: true,
       validate: {
-        validator: function(v: string) {
+        validator: function (v: string) {
           // Basic phone validation (optional)
           return !v || /^[\+]?[\d\s\-\(\)]{10,}$/.test(v);
         },
         message: 'Please enter a valid phone number'
       }
     },
-    mileage: { 
+    mileage: {
       type: Number,
       min: [0, 'Mileage cannot be negative'],
       default: 0
     },
-    isGoodDeal: { 
-      type: Boolean, 
+    isGoodDeal: {
+      type: Boolean,
       default: false,
       index: true
     },
-    isNewCar: { 
-      type: Boolean, 
-      default: false, 
+    isNewCar: {
+      type: Boolean,
+      default: false,
       alias: 'isNew',
       index: true
     },
-    drivetrain: { 
+    drivetrain: {
       type: String,
       trim: true,
       enum: {
-        values: ['Front Wheel Drive', 'Rear Wheel Drive', 'All Wheel Drive', '4WD', 'AWD', 'FWD', 'RWD', ''],
+        values: ['Front-Wheel Drive', 'Rear-Wheel Drive', 'All-Wheel Drive', 'Four-Wheel Drive', 'AWD', 'FWD', 'RWD', ''],
         message: 'Invalid drivetrain type'
       }
     },
-    transmission: { 
+    transmission: {
       type: String,
       trim: true,
       enum: {
@@ -151,26 +154,26 @@ const CarSchema = new Schema<ICarDocument>(
         message: 'Invalid transmission type'
       }
     },
-    type: { 
+    type: {
       type: String,
       trim: true,
       default: 'car'
     },
-    title: { 
+    title: {
       type: String,
       trim: true,
       index: 'text' // Text index for search functionality
     },
-    originalPrice: { 
+    originalPrice: {
       type: Number,
       min: [0, 'Original price cannot be negative']
     },
-    location: { 
+    location: {
       type: String,
       trim: true,
       index: true // Add index for location filtering
     },
-    condition: { 
+    condition: {
       type: String,
       trim: true,
       enum: {
@@ -179,7 +182,7 @@ const CarSchema = new Schema<ICarDocument>(
       },
       default: 'Used'
     },
-    bodyType: { 
+    bodyType: {
       type: String,
       trim: true,
       index: true, // Add index for body type filtering
@@ -188,7 +191,7 @@ const CarSchema = new Schema<ICarDocument>(
         message: 'Invalid body type'
       }
     },
-    fuelType: { 
+    fuelType: {
       type: String,
       trim: true,
       enum: {
@@ -196,83 +199,97 @@ const CarSchema = new Schema<ICarDocument>(
         message: 'Invalid fuel type'
       }
     },
-    cylinders: { 
+    cylinders: {
       type: Number,
       min: [0, 'Cylinders cannot be negative'],
       max: [16, 'Too many cylinders']
     },
-    doors: { 
+    doors: {
       type: Number,
       min: [2, 'Must have at least 2 doors'],
       max: [6, 'Too many doors']
     },
-    seats: { 
+    seats: {
       type: Number,
       min: [1, 'Must have at least 1 seat'],
       max: [12, 'Too many seats']
     },
-    features: { 
+    features: {
       type: [String],
       default: []
     },
-    rating: { 
+    rating: {
       type: Number,
       min: [0, 'Rating cannot be negative'],
       max: [5, 'Rating cannot exceed 5'],
       index: true
     },
-    reviews: { 
+    reviews: {
       type: Number,
       min: [0, 'Reviews cannot be negative'],
       default: 0
     },
-    isSponsored: { 
-      type: Boolean, 
+    isSponsored: {
+      type: Boolean,
       default: false,
       index: true // Add index for sponsored cars
     },
-    whatsappNumber: { 
+    whatsappNumber: {
       type: String,
       trim: true,
       validate: {
-        validator: function(v: string) {
+        validator: function (v: string) {
           // WhatsApp number validation (optional)
           return !v || /^[\+]?[\d\s\-\(\)]{10,}$/.test(v);
         },
         message: 'Please enter a valid WhatsApp number'
       }
     },
-    carMake: { 
+    carMake: {
       type: String,
       trim: true
     },
-    images: { 
+    images: {
       type: [String],
       default: [],
       validate: {
-        validator: function(v: string[]) {
+        validator: function (v: string[]) {
           return v.length <= 20; // Limit number of images
         },
         message: 'Too many images (max 20)'
       }
     },
-    category: { 
+    category: {
       type: String,
       trim: true,
       index: true
     },
-    specifications: { 
-      type: Map, 
+    specifications: {
+      type: Map,
       of: String,
       default: new Map()
     },
-    description: { 
+    description: {
       type: String,
       trim: true,
       maxlength: [2000, 'Description cannot exceed 2000 characters']
     },
+    postedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'User is required!'],
+    },
+    status: {
+      type: String,
+      trim: true,
+      enum: {
+        values: ['active', 'inactive', 'pending', 'sold', 'archived', ''],
+        message: 'Invalid status'
+      },
+      default: 'active'
+    },
   },
-  { 
+  {
     timestamps: true,
     // Add virtuals and methods
     toJSON: { virtuals: true },
@@ -281,27 +298,27 @@ const CarSchema = new Schema<ICarDocument>(
 );
 
 // Add virtual fields
-CarSchema.virtual('fullTitle').get(function() {
+CarSchema.virtual('fullTitle').get(function () {
   return `${this.year} ${this.make} ${this.carModel}`;
 });
 
-CarSchema.virtual('discountPercentage').get(function() {
+CarSchema.virtual('discountPercentage').get(function () {
   if (this.originalPrice && this.originalPrice > this.price) {
     return Math.round(((this.originalPrice - this.price) / this.originalPrice) * 100);
   }
   return 0;
 });
 
-CarSchema.virtual('isOnSale').get(function() {
+CarSchema.virtual('isOnSale').get(function () {
   return this.originalPrice && this.originalPrice > this.price;
 });
 
-CarSchema.virtual('ageInYears').get(function() {
+CarSchema.virtual('ageInYears').get(function () {
   return new Date().getFullYear() - this.year;
 });
 
 // Add instance methods
-CarSchema.methods.toSummary = function() {
+CarSchema.methods.toSummary = function () {
   return {
     _id: this._id,
     title: this.fullTitle,
@@ -319,19 +336,19 @@ CarSchema.methods.toSummary = function() {
 };
 
 // Add static methods
-CarSchema.statics.findFeatured = function() {
+CarSchema.statics.findFeatured = function () {
   return this.find({ isFeatured: true, isSold: false })
     .sort({ isSponsored: -1, createdAt: -1 });
 };
 
-CarSchema.statics.findByPriceRange = function(min: number, max: number) {
-  return this.find({ 
+CarSchema.statics.findByPriceRange = function (min: number, max: number) {
+  return this.find({
     price: { $gte: min, $lte: max },
-    isSold: false 
+    isSold: false
   }).sort({ price: 1 });
 };
 
-CarSchema.statics.searchCars = function(searchTerm: string) {
+CarSchema.statics.searchCars = function (searchTerm: string) {
   return this.find({
     $text: { $search: searchTerm },
     isSold: false
@@ -340,7 +357,7 @@ CarSchema.statics.searchCars = function(searchTerm: string) {
 };
 
 // Pre-save middleware
-CarSchema.pre('save', function(next) {
+CarSchema.pre('save', function (next) {
   // Ensure title is set if not provided
   if (!this.title) {
     this.title = `${this.year} ${this.make} ${this.carModel}`;

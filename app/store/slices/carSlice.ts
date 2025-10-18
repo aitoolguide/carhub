@@ -241,54 +241,90 @@ export const cleanFilters = (filters: CarFilters): CarFilters => {
 
     return cleaned;
 };
-// Async thunk to fetch all cars from the API
-// export const fetchCars = createAsyncThunk(
-//     'cars/fetchCars',
-//     async (
-//         params: FetchCarsParams = { filters: {}, limit: 10, page: 1 }
-//     ) => {
-//         const { page, limit, filters } = params;
-//         const queryParams = new URLSearchParams();
-//         queryParams.append('page', page.toString());
-//         queryParams.append('limit', limit.toString());
 
-//         // Append filters to the query string
-//         Object.entries(filters).forEach(([key, value]) => {
-//             if (Array.isArray(value)) {
-//                 value.forEach(item => queryParams.append(`${key}[]`, item));
-//             } else if (value) {
-//                 queryParams.append(key, value.toString());
-//             }
+// // Async thunk to create a new car
+// export const createCar = createAsyncThunk(
+//     'cars/createCar',
+//     async (newCar: Partial<ICar>) => {
+//         const response = await fetch('/api/cars/new', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify(newCar),
 //         });
-
-//         const response = await fetch(`/api/cars?${queryParams.toString()}`);
 //         if (!response.ok) {
-//             throw new Error('Failed to fetch cars with filters');
+//             throw new Error('Failed to create car');
 //         }
-//         const data: ICar[] = await response.json();
+//         const data: ICar = await response.json();
 //         return data;
 //     }
 // );
 
-// Async thunk to create a new car
 export const createCar = createAsyncThunk(
     'cars/createCar',
-    async (newCar: Partial<ICar>) => {
-        const response = await fetch('/api/cars/new', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newCar),
-        });
-        if (!response.ok) {
-            throw new Error('Failed to create car');
+    async (carData: FormData | Partial<ICar>, { rejectWithValue }) => {
+        try {
+            let body: any;
+            let headers: HeadersInit = {};
+
+            // Check if it's FormData (with images) or regular object
+            if (carData instanceof FormData) {
+                body = carData;
+                // Don't set Content-Type for FormData - browser will set it with boundary
+            } else {
+                body = JSON.stringify(carData);
+                headers = {
+                    'Content-Type': 'application/json',
+                };
+            }
+
+            const response = await fetch('/api/cars/new', {
+                method: 'POST',
+                headers,
+                body,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `Failed to create car: ${response.status}`);
+            }
+
+            const data: ICar = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to create car:', error);
+            return rejectWithValue(
+                error instanceof Error ? error.message : 'Failed to create car'
+            );
         }
-        const data: ICar = await response.json();
-        return data;
     }
 );
 
+// Helper function to prepare FormData from car object
+export const prepareCarFormData = (carData: any): FormData => {
+    const formData = new FormData();
+
+    // Add all text/number fields
+    Object.entries(carData).forEach(([key, value]) => {
+        if (key === 'images' && Array.isArray(value)) {
+            // Handle image files
+            value.forEach((file: File) => {
+                formData.append('images', file);
+            });
+        } else if (key === 'imagePreviews') {
+            // Skip preview URLs
+            return;
+        } else if (Array.isArray(value)) {
+            // Convert arrays to JSON string
+            formData.append(key, JSON.stringify(value));
+        } else if (value !== null && value !== undefined && value !== '') {
+            formData.append(key, value.toString());
+        }
+    });
+
+    return formData;
+};
 // Async thunk to update an existing car
 export const updateCar = createAsyncThunk(
     'cars/updateCar',
@@ -378,9 +414,11 @@ const carSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
+            
             .addCase(createCar.fulfilled, (state, action: PayloadAction<ICar>) => {
                 state.loading = false;
                 state.cars.push(action.payload);
+                 state.totalCount += 1;
             })
             .addCase(createCar.rejected, (state, action) => {
                 state.loading = false;
