@@ -48,6 +48,20 @@ export interface ICar {
   postedBy?: string;
   status?: string;
   isNewCar?: boolean; // Alias for isNew
+  variant?: string;
+  engineCapacity?: number;
+  exteriorColor?: string;
+  previousOwners?: number;
+  registrationCity?: string;
+  certifiedScore?: number;
+  isVerified?: boolean;
+  trim?: string;
+
+   hybrid?: boolean;           // Hybrid yes/no
+  horsepower?: string;        // e.g., "100 - 199 HP"
+  sellerType?: string;        // e.g., "Owner"
+  warranty?: string;          // e.g., "No"
+  steeringSide?: string;      // e.g., "Left Hand"
 }
 
 // Mongoose document type
@@ -279,6 +293,11 @@ const CarSchema = new Schema<ICarDocument>(
       ref: 'User',
       required: [true, 'User is required!'],
     },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      index: true
+    },
     status: {
       type: String,
       trim: true,
@@ -287,6 +306,30 @@ const CarSchema = new Schema<ICarDocument>(
         message: 'Invalid status'
       },
       default: 'active'
+    },
+     hybrid: {
+      type: Boolean,
+      default: false,
+    },
+    horsepower: {
+      type: String,
+      trim: true,
+    },
+    sellerType: {
+      type: String,
+      trim: true,
+      enum: ['Owner', 'Dealer', 'Broker', ''],
+    },
+    warranty: {
+      type: String,
+      trim: true,
+      enum: ['Yes', 'No', ''],
+      default: 'No',
+    },
+    steeringSide: {
+      type: String,
+      trim: true,
+      enum: ['Left Hand', 'Right Hand', ''],
     },
   },
   {

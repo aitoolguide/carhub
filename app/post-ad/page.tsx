@@ -18,7 +18,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-// Form Data Interface
+// Add new attributes to CarFormData
 interface CarFormData {
   // Basic Info
   title: string;
@@ -39,14 +39,17 @@ interface CarFormData {
   drivetrain: string;
   cylinders: number | string;
   engineSize: string;
+  hybrid: boolean | null;          // New
+  horsepower: number | string;     // New
+  steeringSide: string;            // New
+  warranty: string;                // New
+  sellerType: string;              // New
   
   // Features
   exteriorColor: string;
   interiorColor: string;
   doors: number | string;
   seats: number | string;
-  
-  // Additional Features
   features: string[];
   
   // Images
@@ -71,36 +74,58 @@ const PostAdPage = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
-  const [formData, setFormData] = useState<CarFormData>({
-    title: '',
-    description: '',
-    make: '',
-    model: '',
-    year: '',
-    condition: 'Used',
-    price: '',
-    bodyType: '',
-    mileage: '',
-    fuelType: 'Gasoline',
-    transmission: 'Automatic',
-    drivetrain: '',
-    cylinders: '',
-    engineSize: '',
-    exteriorColor: '',
-    interiorColor: '',
-    doors: 4,
-    seats: 5,
-    features: [],
-    images: [],
-    imagePreviews: [],
-    contactName: '',
-    contactPhone: '',
-    contactEmail: '',
-    location: '',
-    vin: '',
-    isFeatured: false,
-    isSponsored: false
-  });
+  // Initialize in state
+const [formData, setFormData] = useState<CarFormData>({
+  title: '',
+  description: '',
+  make: '',
+  model: '',
+  year: '',
+  condition: 'Used',
+  price: '',
+  bodyType: '',
+  mileage: '',
+  fuelType: 'Gasoline',
+  transmission: 'Automatic',
+  drivetrain: '',
+  cylinders: '',
+  engineSize: '',
+  hybrid: null,
+  horsepower: '',
+  steeringSide: '',
+  warranty: '',
+  sellerType: '',
+  exteriorColor: '',
+  interiorColor: '',
+  doors: 4,
+  seats: 5,
+  features: [],
+  images: [],
+  imagePreviews: [],
+  contactName: '',
+  contactPhone: '',
+  contactEmail: '',
+  location: '',
+  vin: '',
+  isFeatured: false,
+  isSponsored: false
+});
+
+// Validation before moving to next step
+const canProceed = (step: number) => {
+  switch(step) {
+    case 1:
+      return formData.title && formData.make && formData.model && formData.year && formData.bodyType && formData.description;
+    case 2:
+      return formData.price && formData.mileage && formData.fuelType && formData.transmission;
+    case 3:
+      return formData.exteriorColor && formData.hybrid !== null && formData.horsepower && formData.steeringSide && formData.warranty && formData.sellerType;
+    case 5:
+      return formData.contactName && formData.contactPhone && formData.contactEmail && formData.location;
+    default:
+      return true;
+  }
+};
 
   const totalSteps = 5;
 
@@ -174,7 +199,7 @@ const PostAdPage = () => {
       formData.images.forEach((image, index) => {
         submitData.append('images', image);
       });
-
+      console.log('Submitting form data:', submitData);
       const response = await fetch('/api/cars/new', {
         method: 'POST',
         body: submitData
@@ -200,9 +225,13 @@ const PostAdPage = () => {
     }
   };
 
-  const nextStep = () => {
-    if (currentStep < totalSteps) setCurrentStep(currentStep + 1);
-  };
+const nextStep = () => {
+  if (canProceed(currentStep)) {
+    setCurrentStep(currentStep + 1);
+  } else {
+    alert("Please fill in all required fields before proceeding.");
+  }
+};
 
   const prevStep = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
@@ -457,7 +486,75 @@ const PostAdPage = () => {
         <Palette className="mr-3" />
         Appearance & Features
       </h2>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-2">Hybrid *</label>
+    <select
+      value={formData.hybrid === null ? '' : formData.hybrid ? 'yes' : 'no'}
+      onChange={(e) => handleInputChange('hybrid', e.target.value === 'yes')}
+      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+      required
+    >
+      <option value="">Select</option>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+  </div>
 
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-2">Horsepower *</label>
+    <input
+      type="number"
+      value={formData.horsepower}
+      onChange={(e) => handleInputChange('horsepower', e.target.value)}
+      placeholder="e.g., 150"
+      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+      required
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-2">Steering Side *</label>
+    <select
+      value={formData.steeringSide}
+      onChange={(e) => handleInputChange('steeringSide', e.target.value)}
+      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+      required
+    >
+      <option value="">Select</option>
+      <option value="Left Hand">Left Hand</option>
+      <option value="Right Hand">Right Hand</option>
+    </select>
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-2">Warranty *</label>
+    <select
+      value={formData.warranty}
+      onChange={(e) => handleInputChange('warranty', e.target.value)}
+      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+      required
+    >
+      <option value="">Select</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-2">Seller Type *</label>
+    <select
+      value={formData.sellerType}
+      onChange={(e) => handleInputChange('sellerType', e.target.value)}
+      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+      required
+    >
+      <option value="">Select</option>
+      <option value="Owner">Owner</option>
+      <option value="Dealer">Dealer</option>
+    </select>
+  </div>
+</div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Exterior Color *</label>

@@ -8,28 +8,25 @@ import { existsSync } from 'fs';
 import { getServerSession } from "next-auth";
 import { authOptions } from '@app/lib/auth';
 import { Types } from 'mongoose';
-import { console } from 'inspector';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
-        console.log('Creating new car ad by user:', session?.user);
         if (!session || !session.user?.email) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
 
         await dbConnect();
 
-        // Parse FormData
         const formData = await req.formData();
-        console.log(`formData.get('drivetrain') => ${formData.get('drivetrain')}`)
+        console.log('Received form data for new car ad.', formData);
         // Extract text fields
         const carData: any = {
             title: formData.get('title'),
             description: formData.get('description'),
             make: formData.get('make'),
-            carModel: formData.get('model'), // Use carModel for database field
+            carModel: formData.get('model'),
             year: parseInt(formData.get('year') as string),
             condition: formData.get('condition'),
             price: parseFloat(formData.get('price') as string),
@@ -51,9 +48,15 @@ export async function POST(req: NextRequest) {
             isSold: false,
             createdAt: new Date(),
             updatedAt: new Date(),
-
+            dealerPhone: formData.get('dealerPhone') || undefined,
+            // NEW ATTRIBUTES
+            hybrid: formData.get('hybrid') === 'true' ? true : formData.get('hybrid') === 'false' ? false : undefined,
+            horsepower: formData.get('horsepower') ? parseInt(formData.get('horsepower') as string) : undefined,
+            sellerType: formData.get('sellerType') || undefined,
+            warranty: formData.get('warranty') || undefined,
+            steeringSide: formData.get('steeringSide') || undefined
         };
-
+        console.log('Parsed car data:', carData);
         // Parse features array
         const featuresStr = formData.get('features') as string;
         if (featuresStr) {
@@ -77,62 +80,51 @@ export async function POST(req: NextRequest) {
         const uploadedImagePaths: string[] = [];
 
         if (images && images.length > 0) {
-            // Create uploads directory if it doesn't exist
             const uploadDir = join(process.cwd(), 'public', 'uploads', 'cars');
-
             if (!existsSync(uploadDir)) {
                 await mkdir(uploadDir, { recursive: true });
             }
 
-            // Process each image
             for (let i = 0; i < images.length; i++) {
                 const image = images[i];
                 if (image && image.size > 0) {
-                    // Generate unique filename
                     const timestamp = Date.now();
                     const randomStr = Math.random().toString(36).substring(7);
                     const extension = image.name.split('.').pop();
                     const filename = `${timestamp}-${randomStr}.${extension}`;
-
-                    // Convert file to buffer and save
                     const bytes = await image.arrayBuffer();
                     const buffer = Buffer.from(bytes);
                     const filepath = join(uploadDir, filename);
-
                     await writeFile(filepath, buffer);
-
-                    // Store relative path for database
                     uploadedImagePaths.push(`/uploads/cars/${filename}`);
                 }
             }
         }
 
-        // Add images to car data
         if (uploadedImagePaths.length > 0) {
             carData.images = uploadedImagePaths;
-            carData.image = uploadedImagePaths[0]; // Set first image as primary
+            carData.image = uploadedImagePaths[0];
         }
-        const uid =session.user.id;
+
+        const uid = session.user.id;
         if (!uid) {
             return NextResponse.json(
                 { message: 'User id missing in session' },
                 { status: 401 }
             );
         }
+        carData.createdAt = new Date();
         carData.postedBy = new Types.ObjectId(uid);
-        // Create the car document
-        console.log('Final car data to be saved:', carData);
         const newCar = await Car.create(carData);
-        console.log('New car created with postedBy:', newCar.postedBy);
-        // Convert to plain object
         const carResponse = {
             ...newCar.toObject(),
             _id: newCar._id.toString(),
             category: newCar.category?.toString(),
-            model: newCar.carModel || newCar.model, // Include model alias
+            model: newCar.carModel || newCar.model,
         };
 
         return NextResponse.json(carResponse, { status: 201 });
+
     } catch (error) {
         console.error('Failed to create car:', error);
         return NextResponse.json(

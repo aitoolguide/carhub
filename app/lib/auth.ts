@@ -59,9 +59,6 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
-      console.log('🎫 JWT Callback - Token:', token);
-      console.log('👤 JWT Callback - User:', user);
-      console.log('🔗 JWT Callback - Account:', account);
 
       // ✅ Handle both Google and Credentials login
       if (user) {
