@@ -3,11 +3,13 @@ import Link from 'next/link';
 
 import { Plus } from 'lucide-react';
 import { Button } from '@app/components/ui';
-
+/**
+ * 
+ */
 /**
  * A component to display actions for car management, like adding a new car.
  */
-const CarActions = () => {
+const CarActions = () => { 
   return (
     <div className="flex justify-end mb-4">
       <Link href="/admin/cars/new">
